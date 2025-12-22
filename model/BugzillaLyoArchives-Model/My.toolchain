@@ -1,0 +1,95 @@
+<?xml version="1.0" ?>
+<oslc4j_tc:Toolchain xmlns:oslc4j_tc="http://org.eclipse.lyo/oslc4j/toolChain" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oslc4j_ai="http://org.eclipse.lyo/oslc4j/adaptorInterface" xmi:version="2.0">
+  <adaptorInterfaces name="Lyo Bugzilla adaptor (archives)" backendCodeTemplate_getResources="" backendCodeTemplate_searchResources="">
+    <serviceProviderCatalog title="Service Provider Catalog" description="Service Provider Catalog">
+      <serviceProviders title="Service Provider" description="Service Provider" serviceNamespace="">
+        <services domainSpecification="//@specification/@domainSpecifications[name='Bugzilla']" serviceNamespace="relativeToServiceProvider">
+          <queryCapabilities title="QueryCapability1" label="QueryCapability1" queryBaseURI="query" resourceTypes="_MWsmYEO2EfC3rraib_6FVQ"/>
+        </services>
+      </serviceProviders>
+    </serviceProviderCatalog>
+    <webServices name="BugzillaLyoArchivesService1" serviceUrlPattern="bugz" resourceUrlPattern="{bugId}" resourceTypes="_MWsmYEO2EfC3rraib_6FVQ"/>
+    <specification/>
+    <requiredAdaptors xsi:type="oslc4j_ai:GenericRequiredAdaptor" serviceProviderCatalogURI="http://your.host.com/adaptor/services/catalog/singleton" name="GenericRequiredAdaptor"/>
+    <configuration rootServerBaseUrl="http://localhost:8180/" applicationContextPath="/" servletUrlPattern="/services/*" xsi:type="oslc4j_ai:MavenServerConfiguration" jettyPort="8180">
+      <generalConfiguration filesBasePath="../BugzillaLyoArchives/" javaBasePackageName="se.kth.md.it.bcm"/>
+      <projectConfiguration lyoVersion="7.0.0-SNAPSHOT" xsi:type="oslc4j_ai:MavenProjectConfiguration" groupId="se.kth.md.it.bcm" artifactId="BugzillaLyoArchives" version="0.3.0-SNAPSHOT"/>
+    </configuration>
+    <trsService basePageLimit="50" changeLogPageLimit="50"/>
+  </adaptorInterfaces>
+  <specification>
+    <domainSpecifications name="OSLC_CORE" namespaceURI="http://open-services.net/ns/core#" namespacePrefix="//@specification/@domainPrefixes[name='oslc']">
+      <resourceProperties id="_MXOx-0O2EfC3rraib_6FVQ" name="discussedBy" title="" description="A series of notes and comments about this resource." occurs="zeroOrOne" valueType="Resource" representation="either"/>
+      <resourceProperties id="_MXOx_0O2EfC3rraib_6FVQ" name="instanceShape" title="" description="The URI of a Resource Shape that describes the possible properties, occurrence, value types, allowed values and labels. This shape information is useful in displaying the subject resource as well as guiding clients in performing modifications. Instance shapes may be specific to the authenticated user associated with the request that retrieved the resource, the current state of the resource and other factors and thus should not be cached." occurs="zeroOrOne" valueType="Resource"/>
+      <resourceProperties id="_MXOyAkO2EfC3rraib_6FVQ" name="serviceProvider" title="" description="A link to the resource's OSLC Service Provider. There may be cases when the subject resource is available from a service provider that implements multiple domain specifications, which could result in multiple values for this property. " valueType="URI"/>
+      <resourceProperties id="_MXOyA0O2EfC3rraib_6FVQ" name="shortTitle" title="" description="Shorter form of dcterms:title for the resource represented as rich text in XHTML content. SHOULD include only content that is valid inside an XHTML &lt;span&gt; element." occurs="zeroOrOne" valueType="XMLLiteral"/>
+    </domainSpecifications>
+    <domainSpecifications name="FOAF" namespaceURI="http://xmlns.com/foaf/0.1/" namespacePrefix="//@specification/@domainPrefixes[name='foaf']">
+      <resources id="_MXOx4UO2EfC3rraib_6FVQ" name="Person" resourceProperties="_MXOK0EO2EfC3rraib_6FVQ _MXOK0UO2EfC3rraib_6FVQ _MXOx4EO2EfC3rraib_6FVQ"/>
+      <resourceProperties id="_MXOK0EO2EfC3rraib_6FVQ" name="name" title="" description="The full name of a person expressed as simple text string." valueType="String"/>
+      <resourceProperties id="_MXOK0UO2EfC3rraib_6FVQ" name="givenName" description="Given name of person expressed as simple text string." valueType="String"/>
+      <resourceProperties id="_MXOx4EO2EfC3rraib_6FVQ" name="familyName" description="Family name of person expressed as simple text string." valueType="String"/>
+    </domainSpecifications>
+    <domainSpecifications name="Dublin Core" namespaceURI="http://purl.org/dc/terms/" namespacePrefix="//@specification/@domainPrefixes[name='dcterms']">
+      <resources id="_MXOx4kO2EfC3rraib_6FVQ" name="Type"/>
+      <resourceProperties id="_MXOx6EO2EfC3rraib_6FVQ" name="contributor" title="" description="Contributor or contributors to the resource. It is likely that the target resource will be a foaf:Person but that is not necessarily the case. " occurs="zeroOrMany" valueType="LocalResource" range="_MXOx4UO2EfC3rraib_6FVQ" representation="either"/>
+      <resourceProperties id="_MXOx6UO2EfC3rraib_6FVQ" name="creator" title="" description="Creator or creators of resource (reference: Dublin Core). It is likely that the target resource will be a foaf:Person but that is not necessarily the case." occurs="zeroOrMany" valueType="LocalResource" range="_MXOx4UO2EfC3rraib_6FVQ" representation="either"/>
+      <resourceProperties id="_MXOx6kO2EfC3rraib_6FVQ" name="type" title="" description="A short string representation for the type, example 'Defect'." occurs="zeroOrMany" valueType="LocalResource" range="_MXOx4kO2EfC3rraib_6FVQ"/>
+      <resourceProperties id="_MXOx8UO2EfC3rraib_6FVQ" name="subject" title="" description="Tag or keyword for a resource. Each occurrence of a dcterms:subject property denotes an additional tag for the resource." occurs="zeroOrMany" valueType="String"/>
+      <resourceProperties id="_MXOx-UO2EfC3rraib_6FVQ" name="created" title="" description="Timestamp of resource creation" occurs="zeroOrOne" readOnly="true" valueType="DateTime"/>
+      <resourceProperties id="_MXOx-kO2EfC3rraib_6FVQ" name="description" title="" description="Descriptive text about resource represented as rich text in XHTML content. SHOULD include only content that is valid and suitable inside an XHTML &lt;div&gt; element. " occurs="zeroOrOne" valueType="XMLLiteral"/>
+      <resourceProperties id="_MXOx_UO2EfC3rraib_6FVQ" name="identifier" title="" description="A unique identifier for a resource. Typically read-only and assigned by the service provider when a resource is created. Not typically intended for end-user display." readOnly="true" valueType="String"/>
+      <resourceProperties id="_MXOyAEO2EfC3rraib_6FVQ" name="modified" title="" description="Timestamp last latest resource modification" occurs="zeroOrOne" readOnly="true" valueType="DateTime"/>
+      <resourceProperties id="_MXOyBUO2EfC3rraib_6FVQ" name="title" title="" description="Title of the resource represented as rich text in XHTML content. SHOULD include only content that is valid inside an XHTML &lt;span&gt; element. " valueType="XMLLiteral"/>
+      <resourceProperties name="source" title="" description="A related resource from which the described resource is derived. " occurs="zeroOrOne" valueType="Resource" representation="reference"/>
+    </domainSpecifications>
+    <domainSpecifications name="RDF" namespaceURI="http://www.w3.org/1999/02/22-rdf-syntax-ns#" namespacePrefix="//@specification/@domainPrefixes[name='rdf']">
+      <resourceProperties id="_MXOx9UO2EfC3rraib_6FVQ" name="type" title="" description="The resource type URIs." occurs="zeroOrMany" valueType="URI"/>
+      <resourceProperties name="label" title="" description=" Is an instance of rdf:Property that may be used to provide a human-readable version of a resource's name" valueType="String"/>
+      <resourceProperties name="comment" description="A description of the subject resource" occurs="zeroOrOne" valueType="String"/>
+    </domainSpecifications>
+    <domainSpecifications name="RDFS" namespaceURI="http://www.w3.org/2000/01/rdf-schema#" namespacePrefix="//@specification/@domainPrefixes[name='rdfs']"/>
+    <domainSpecifications name="Change_Management" namespaceURI="http://open-services.net/ns/cm#" namespacePrefix="//@specification/@domainPrefixes[name='oslc_cm']">
+      <resources id="_MXPY8EO2EfC3rraib_6FVQ" name="ChangeRequest" resourceProperties="_MXOx40O2EfC3rraib_6FVQ _MXOx5EO2EfC3rraib_6FVQ _MXOx5UO2EfC3rraib_6FVQ _MXOx5kO2EfC3rraib_6FVQ _MXOx50O2EfC3rraib_6FVQ _MXOx6EO2EfC3rraib_6FVQ _MXOx6UO2EfC3rraib_6FVQ _MXOx6kO2EfC3rraib_6FVQ _MXOx60O2EfC3rraib_6FVQ _MXOx7EO2EfC3rraib_6FVQ _MXOx7UO2EfC3rraib_6FVQ _MXOx7kO2EfC3rraib_6FVQ _MXOx70O2EfC3rraib_6FVQ _MXOx8EO2EfC3rraib_6FVQ _MXOx8UO2EfC3rraib_6FVQ _MXOx8kO2EfC3rraib_6FVQ _MXOx80O2EfC3rraib_6FVQ _MXOx9EO2EfC3rraib_6FVQ _MXOx9UO2EfC3rraib_6FVQ _MXOx9kO2EfC3rraib_6FVQ _MXOx90O2EfC3rraib_6FVQ _MXOx-EO2EfC3rraib_6FVQ _MXOx-UO2EfC3rraib_6FVQ _MXOx-kO2EfC3rraib_6FVQ _MXOx-0O2EfC3rraib_6FVQ _MXOx_EO2EfC3rraib_6FVQ _MXOx_UO2EfC3rraib_6FVQ _MXOx_kO2EfC3rraib_6FVQ _MXOx_0O2EfC3rraib_6FVQ _MXOyAEO2EfC3rraib_6FVQ _MXOyAUO2EfC3rraib_6FVQ _MXOyAkO2EfC3rraib_6FVQ _MXOyA0O2EfC3rraib_6FVQ _MXOyBEO2EfC3rraib_6FVQ _MXOyBUO2EfC3rraib_6FVQ _MXOyBkO2EfC3rraib_6FVQ"/>
+      <resourceProperties id="_MXOx40O2EfC3rraib_6FVQ" name="affectedByDefect" title="" description="Change request is affected by a reported defect. It is likely that the target resource will be an oslc_cm:ChangeRequest but that is not necessarily the case." occurs="zeroOrMany" valueType="Resource"/>
+      <resourceProperties id="_MXOx5EO2EfC3rraib_6FVQ" name="affectsPlanItem" title="" description="Change request affects a plan item. It is likely that the target resource will be an oslc_cm:ChangeRequest but that is not necessarily the case." occurs="zeroOrMany" valueType="Resource"/>
+      <resourceProperties id="_MXOx5UO2EfC3rraib_6FVQ" name="affectsRequirement" title="" description="Change request affecting a Requirement. It is likely that the target resource will be an oslc_rm:Requirement but that is not necessarily the case." occurs="zeroOrMany" valueType="Resource"/>
+      <resourceProperties id="_MXOx5kO2EfC3rraib_6FVQ" name="affectsTestResult" title="" description="Associated QM resource that is affected by this Change Request. It is likely that the target resource will be an oslc_qm:TestResult but that is not necessarily the case." occurs="zeroOrMany" valueType="Resource"/>
+      <resourceProperties id="_MXOx50O2EfC3rraib_6FVQ" name="blocksTestExecutionRecord" title="" description="Associated QM resource that is blocked by this Change Request. It is likely that the target resource will be an oslc_qm:TestExecutionRecord but that is not necessarily the case." occurs="zeroOrMany" valueType="Resource"/>
+      <resourceProperties id="_MXOx60O2EfC3rraib_6FVQ" name="implementsRequirement" title="" description="Implements associated Requirement. It is likely that the target resource will be an oslc_rm:Requirement but that is not necessarily the case." occurs="zeroOrMany" valueType="Resource"/>
+      <resourceProperties id="_MXOx7EO2EfC3rraib_6FVQ" name="relatedChangeRequest" title="" description="This relationship is loosely coupled and has no specific meaning. It is likely that the target resource will be an oslc_cm:ChangeRequest but that is not necessarily the case." occurs="zeroOrMany" valueType="Resource"/>
+      <resourceProperties id="_MXOx7UO2EfC3rraib_6FVQ" name="relatedTestCase" title="" description="Related QM test case resource. It is likely that the target resource will be an oslc_qm:TestCase but that is not necessarily the case." occurs="zeroOrMany" valueType="Resource"/>
+      <resourceProperties id="_MXOx7kO2EfC3rraib_6FVQ" name="relatedTestExecutionRecord" title="" description="Related to a QM test execution resource. It is likely that the target resource will be an oslc_qm:TestExecutionRecord but that is not necessarily the case." occurs="zeroOrMany" valueType="Resource"/>
+      <resourceProperties id="_MXOx70O2EfC3rraib_6FVQ" name="relatedTestPlan" title="" description="Related QM test plan resource. It is likely that the target resource will be an oslc_qm:TestPlan but that is not necessarily the case." occurs="zeroOrMany" valueType="Resource"/>
+      <resourceProperties id="_MXOx8EO2EfC3rraib_6FVQ" name="relatedTestScript" title="" description="Related QM test script resource. It is likely that the target resource will be an oslc_qm:TestScript but that is not necessarily the case." occurs="zeroOrMany" valueType="Resource"/>
+      <resourceProperties id="_MXOx8kO2EfC3rraib_6FVQ" name="testedByTestCase" title="" description="Test case by which this change request is tested. It is likely that the target resource will be an oslc_qm:TestCase but that is not necessarily the case." occurs="zeroOrMany" valueType="Resource"/>
+      <resourceProperties id="_MXOx80O2EfC3rraib_6FVQ" name="tracksChangeSet" title="" description="Tracks SCM change set resource. It is likely that the target resource will be an oslc_scm:ChangeSet but that is not necessarily the case." occurs="zeroOrMany" valueType="Resource"/>
+      <resourceProperties id="_MXOx9EO2EfC3rraib_6FVQ" name="tracksRequirement" title="" description="Tracks the associated Requirement or Requirement ChangeSet resources. It is likely that the target resource will be an oslc_rm:Requirement but that is not necessarily the case." occurs="zeroOrMany" valueType="Resource"/>
+      <resourceProperties id="_MXOx9kO2EfC3rraib_6FVQ" name="approved" title="" description="Whether or not the Change Request has been approved." occurs="zeroOrOne" readOnly="true"/>
+      <resourceProperties id="_MXOx90O2EfC3rraib_6FVQ" name="closed" title="" description="Whether or not the Change Request is completely done, no further fixes or fix verification is needed." occurs="zeroOrOne" readOnly="true"/>
+      <resourceProperties id="_MXOx-EO2EfC3rraib_6FVQ" name="closeDate" title="" description="The date at which no further activity or work is intended to be conducted." occurs="zeroOrOne" readOnly="true" valueType="DateTime"/>
+      <resourceProperties id="_MXOx_EO2EfC3rraib_6FVQ" name="fixed" title="" description="Whether or not the Change Request has been fixed." occurs="zeroOrOne" readOnly="true"/>
+      <resourceProperties id="_MXOx_kO2EfC3rraib_6FVQ" name="inprogress" title="" description="Whether or not the Change Request in a state indicating that active work is occurring. If oslc_cm:inprogress is true, then oslc_cm:fixed and oslc_cm:closed must also be false" occurs="zeroOrOne" readOnly="true"/>
+      <resourceProperties id="_MXOyAUO2EfC3rraib_6FVQ" name="reviewed" title="" description="Whether or not the Change Request has been reviewed." occurs="zeroOrOne" readOnly="true"/>
+      <resourceProperties id="_MXOyBEO2EfC3rraib_6FVQ" name="status" title="" description="Used to indicate the status of the change request based on values defined by the service provider. Most often a read-only property. Some possible values may include: 'Submitted', 'Done', 'InProgress', etc." occurs="zeroOrOne" valueType="String"/>
+      <resourceProperties id="_MXOyBkO2EfC3rraib_6FVQ" name="verified" title="" description="Whether or not the resolution or fix of the Change Request has been verified." occurs="zeroOrOne" readOnly="true"/>
+    </domainSpecifications>
+    <domainSpecifications name="Bugzilla" namespaceURI="http://www.bugzilla.org/rdf#" namespacePrefix="//@specification/@domainPrefixes[name='bugz']">
+      <resources id="_MWsmYEO2EfC3rraib_6FVQ" name="BugzillaChangeRequest" extends="_MXPY8EO2EfC3rraib_6FVQ" resourceProperties="_MWvpsEO2EfC3rraib_6FVQ _MWvpsUO2EfC3rraib_6FVQ _MWvpskO2EfC3rraib_6FVQ _MWwQwEO2EfC3rraib_6FVQ _MWwQwUO2EfC3rraib_6FVQ _MWwQwkO2EfC3rraib_6FVQ"/>
+      <resourceProperties id="_MWwQwUO2EfC3rraib_6FVQ" name="product" description="" valueType="String"/>
+      <resourceProperties id="_MWwQwEO2EfC3rraib_6FVQ" name="component" title="Component" description="The Bugzilla product definition for this change request." occurs="zeroOrOne" valueType="String"/>
+      <resourceProperties id="_MWvpskO2EfC3rraib_6FVQ" name="version" title="Version" description="The Bugzilla version for this change request." occurs="zeroOrOne" readOnly="true" valueType="String"/>
+      <resourceProperties id="_MWvpsEO2EfC3rraib_6FVQ" name="priority" title="Priority" description="The Bugzilla priority for this change request." occurs="zeroOrOne" valueType="String"/>
+      <resourceProperties id="_MWvpsUO2EfC3rraib_6FVQ" name="platform" title="Platform" description="The Bugzilla platform for this change request." occurs="zeroOrOne" valueType="String"/>
+      <resourceProperties id="_MWwQwkO2EfC3rraib_6FVQ" name="operatingSystem" title="Operating System" description="The Bugzilla operating system for this change request." occurs="zeroOrOne" valueType="String"/>
+    </domainSpecifications>
+    <domainPrefixes name="oslc"/>
+    <domainPrefixes name="foaf"/>
+    <domainPrefixes name="dcterms"/>
+    <domainPrefixes name="rdf"/>
+    <domainPrefixes name="rdfs"/>
+    <domainPrefixes name="oslc_cm"/>
+    <domainPrefixes name="bugz"/>
+  </specification>
+  <vocabularies/>
+</oslc4j_tc:Toolchain>

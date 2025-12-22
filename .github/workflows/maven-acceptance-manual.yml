@@ -1,0 +1,53 @@
+name: Acceptance test (Lyo HEAD)
+run-name: "acceptance@${{ github.ref_name }} (Lyo@${{ github.event.inputs.lyoBranch }}; comment: ${{ inputs.comment }})"
+
+on:
+  workflow_dispatch:
+    inputs:
+      lyoBranch:
+        description: 'Lyo branch to test on'
+        required: true
+        default: 'master'
+      lyoRepo:
+        description: 'Lyo repository or fork'
+        required: true
+        default: 'eclipse/lyo'
+      comment:
+        description: 'comment, e.g. PR number'
+        default: 'n/a'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event.inputs.lyoRepo }}-${{ github.event.inputs.lyoBranch }}
+  cancel-in-progress: false
+
+jobs:
+  build-jdk17:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        java-version: [25]
+#        distribution: ['temurin', 'zulu', 'oracle', 'corretto', 'microsoft', 'liberica']
+        distribution: ['temurin']
+        # include:
+        #   - java-version: '21'
+        #     distribution: 'temurin'
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          repository: "${{ github.event.inputs.lyoRepo }}"
+          ref: "${{ github.event.inputs.lyoBranch }}"
+          path: lyo-trunk
+      - uses: actions/checkout@v6
+        with:
+          path: main
+      - name: Set up JDK ${{ matrix.java-version }}
+        uses: actions/setup-java@v4
+        with:
+          distribution:  ${{ matrix.distribution }}
+          java-version: ${{ matrix.java-version }}
+      - name: 'Maven build (Lyo)'
+        run: mvn -B clean install --file lyo-trunk/pom.xml -DskipTests -Dmaven.javadoc.skip=true
+      - name: 'Maven build (project)'
+        run: |
+          mvn -B clean verify --file main/source/BugzillaLyoArchives/pom.xml
