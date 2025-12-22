@@ -146,6 +146,7 @@ public class BugzillaChangeRequest
         }
     
         // Start of user code toString_finalize
+        result = "Bug %s - %s".formatted(getIdentifier(), getTitle());
         // End of user code
     
         return result;
