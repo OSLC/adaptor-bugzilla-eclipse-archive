@@ -13,7 +13,8 @@ COPY . .
 # Build the application
 RUN mvn -B --no-transfer-progress -f pom.xml -DskipTests clean package -am
 
-FROM docker.io/library/jetty:12-jre21-eclipse-temurin
+# JRE25 variant does not exist yet
+FROM docker.io/library/jetty:12.0-jdk25-alpine-eclipse-temurin
 
 # WARNING DO NOT CHANGE WORKDIR or set it back to what it was before
 # $JETTY_BASE must be correct before starting Jetty
