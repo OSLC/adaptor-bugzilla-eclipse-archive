@@ -45,4 +45,4 @@ jobs:
 
       - name: 'Maven build'
         run: |
-          mvn -B clean verify --file ./BugzillaCachedAdaptor/pom.xml
+          mvn -B clean verify --file ./source/BugzillaLyoArchives/pom.xml
