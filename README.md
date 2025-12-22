@@ -4,6 +4,20 @@ This project implements an OSLC Change Management (CM) server for accessing the 
 
 ## Getting started
 
+**Using Podman:**
+
+```
+podman run -it --rm -p 8180:8080 ghcr.io/oslc/adaptor-bugzilla-eclipse-archive:latest
+```
+
+**Using Docker:**
+
+```
+docker run -it --rm -p 8180:8080 ghcr.io/oslc/adaptor-bugzilla-eclipse-archive:latest
+```
+
+**From source:**
+
 ```
 cd ./source/BugzillaLyoArchives
 mvn clean jetty:run
