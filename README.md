@@ -25,6 +25,13 @@ mvn clean jetty:run
 
 Navigate to http://localhost:8180/ afterwards.
 
+## Using with custom exports
+
+1. Navigate to a Bugzilla search page that displays all the bugs you are interested in. For example, https://bugzilla.mozilla.org/buglist.cgi?product=WebExtensions&component=Android&resolution=--- is the page for WebExtensions support in Firefox for Android.
+2. Click XML at the bottom of the page.
+3. Overwrite `source/BugzillaLyoArchives/src/main/resources/show_bug.cgi.xml` with your downloaded file.
+
+
 ## License
 
 ```
