@@ -88,7 +88,16 @@ public class BugzillaArchive {
 
                     NodeList assignedToNodes = eElement.getElementsByTagName("assigned_to");
                     if (assignedToNodes.getLength() > 0) {
-                         bug.setAssignedTo(assignedToNodes.item(0).getTextContent());
+                         Element assignedToElement = (Element) assignedToNodes.item(0);
+                         bug.setAssignedTo(assignedToElement.getTextContent());
+                         bug.setAssignedToName(assignedToElement.getAttribute("name"));
+                    }
+
+                    NodeList reporterNodes = eElement.getElementsByTagName("reporter");
+                    if (reporterNodes.getLength() > 0) {
+                         Element reporterElement = (Element) reporterNodes.item(0);
+                         bug.setReporterEmail(reporterElement.getTextContent());
+                         bug.setReporterName(reporterElement.getAttribute("name"));
                     }
 
                     NodeList longDescNodes = eElement.getElementsByTagName("long_desc");

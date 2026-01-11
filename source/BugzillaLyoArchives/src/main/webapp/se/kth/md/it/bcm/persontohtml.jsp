@@ -29,7 +29,7 @@ else {
 }
 
 if (asLocalResource != null && asLocalResource.equalsIgnoreCase("true")) {
-    out.write("{a Local Person Resource} - update Person.toString() to present resource as desired.");
+    out.write(aResource.toString(true));
 }
 else {
     if (aResource == null) {

@@ -88,11 +88,27 @@ public class RestDelegate {
 
 		String assignedTo = bug.getAssignedTo();
 		if (assignedTo != null) {
-			String email = assignedTo;
 			Person contributor = new Person();
+			contributor.setName(bug.getAssignedToName() != null ? bug.getAssignedToName() : assignedTo);
+			// We could also set Uri or other props if we had them. 
+			// Ideally we construct a URI for the person, but for now a blank node or local resource is fine? 
+			// The original code made a new Person() which implies a blank node/local resource if no URI is set.
+			// However, Person constructor calls super() which is AbstractResource.
+			// Let's keep it simple and just set the name.
+			
 			HashSet<Person> contributors = new HashSet<Person>();
 			contributors.add(contributor);
 			changeRequest.setContributor(contributors);
+		}
+		
+		String reporterEmail = bug.getReporterEmail();
+		if (reporterEmail != null) {
+		    Person creator = new Person();
+		    creator.setName(bug.getReporterName() != null ? bug.getReporterName() : reporterEmail);
+		    
+		    HashSet<Person> creators = new HashSet<Person>();
+		    creators.add(creator);
+		    changeRequest.setCreator(creators);
 		}
 
 		Date createdDate = bug.getCreationTime();
