@@ -90,9 +90,7 @@
       dt {
           color: #6c757d;
           font-weight: 500;
-      }
-      dd {
-          margin-bottom: 1rem;
+          font-size: 0.9rem;
       }
       .dl-horizontal dt {
           float: left;
@@ -147,7 +145,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-4">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("getIdentifier"); %>
                         <dt class="col-sm-6 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-6">
@@ -156,7 +154,7 @@
                     </dl>
                 </div>
                 <div class="col-md-8">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("getTitle"); %>
                         <dt class="col-sm-3 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-9">
@@ -165,7 +163,7 @@
                     </dl>
                 </div>
                 <div class="col-md-4">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("getStatus"); %>
                         <dt class="col-sm-6 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-6">
@@ -187,7 +185,7 @@
                     </dl>
                 </div>
                 <div class="col-md-8">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("getShortTitle"); %>
                         <dt class="col-sm-3 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-9">
@@ -196,7 +194,7 @@
                     </dl>
                 </div>
                 <div class="col-md-12">
-                     <dl class="row">
+                     <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("getDescription"); %>
                         <dt class="col-sm-2 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-10">
@@ -216,7 +214,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("getCreator"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
@@ -236,7 +234,7 @@
                     </dl>
                 </div>
                 <div class="col-md-6">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("getCreated"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
@@ -245,7 +243,7 @@
                     </dl>
                 </div>
                 <div class="col-md-6">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("getContributor"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
@@ -265,7 +263,7 @@
                     </dl>
                 </div>
                 <div class="col-md-6">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("getModified"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
@@ -285,7 +283,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("getProduct"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
@@ -294,7 +292,7 @@
                     </dl>
                 </div>
                 <div class="col-md-6">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("getComponent"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
@@ -303,7 +301,7 @@
                     </dl>
                 </div>
                 <div class="col-md-6">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("getVersion"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
@@ -312,7 +310,7 @@
                     </dl>
                 </div>
                 <div class="col-md-6">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("getPlatform"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
@@ -321,7 +319,7 @@
                     </dl>
                 </div>
                 <div class="col-md-6">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("getOperatingSystem"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
@@ -330,7 +328,7 @@
                     </dl>
                 </div>
                 <div class="col-md-6">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("getPriority"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
@@ -339,7 +337,7 @@
                     </dl>
                 </div>
                 <div class="col-md-6">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("getDctermsType"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
@@ -352,7 +350,7 @@
                     </dl>
                 </div>
                 <div class="col-md-6">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("getSubject"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
@@ -374,7 +372,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("getCloseDate"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
@@ -383,7 +381,7 @@
                     </dl>
                 </div>
                 <div class="col-md-6">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("isFixed"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
@@ -392,7 +390,7 @@
                     </dl>
                 </div>
                  <div class="col-md-6">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("isInprogress"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
@@ -401,7 +399,7 @@
                     </dl>
                 </div>
                 <div class="col-md-6">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("isClosed"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
@@ -410,7 +408,7 @@
                     </dl>
                 </div>
                 <div class="col-md-6">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("isApproved"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
@@ -419,7 +417,7 @@
                     </dl>
                 </div>
                 <div class="col-md-6">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("isReviewed"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
@@ -428,7 +426,7 @@
                     </dl>
                 </div>
                  <div class="col-md-6">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("isVerified"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
@@ -437,7 +435,7 @@
                     </dl>
                 </div>
                 <div class="col-md-6">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("getDiscussedBy"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
@@ -495,7 +493,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-12">
-                     <dl class="row">
+                     <dl class="row mb-1">
                         <dt class="col-sm-2 text-end">Resource URI</dt>
                         <dd class="col-sm-10">
                         <jsp:include page="/se/kth/md/it/bcm/bugzillachangerequesttohtml.jsp"></jsp:include>
@@ -503,7 +501,7 @@
                     </dl>
                 </div>
                 <div class="col-md-12">
-                    <dl class="row">
+                    <dl class="row mb-1">
                          <dt class="col-sm-2 text-end">Shape</dt>
                          <dd class="col-sm-10">
                             <% 
@@ -514,7 +512,7 @@
                     </dl>
                 </div>
                 <div class="col-md-12">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <dt class="col-sm-2 text-end">rdf:type(s)</dt>
                         <dd class="col-sm-10">
                             <ul>
@@ -526,7 +524,7 @@
                     </dl>
                 </div>
                  <div class="col-md-6">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("getServiceProvider"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
@@ -535,7 +533,7 @@
                     </dl>
                 </div>
                 <div class="col-md-6">
-                    <dl class="row">
+                    <dl class="row mb-1">
                         <% method = BugzillaChangeRequest.class.getMethod("getInstanceShape"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
@@ -565,7 +563,7 @@
             Object value = entry.getValue();
         %>
         <div class="col-md-6">
-        <dl class="row">
+        <dl class="row mb-1">
             <dt class="col-sm-4 text-end"><a href="<%=key.getNamespaceURI() + key.getLocalPart() %>"><%=key.getLocalPart()%></a></dt>
             <dd class="col-sm-8"><%= value.toString()%></dd>
         </dl>
