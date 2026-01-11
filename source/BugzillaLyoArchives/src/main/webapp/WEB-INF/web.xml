@@ -27,7 +27,11 @@
     </context-param>
     <!-- Start of user code webxml1
     -->
-    <!-- TODO: Add additional configurations here to avoid them be overridden upon future re-generation -->
+    <context-param>
+        <description>Treat open issues as abandoned.</description>
+        <param-name>se.kth.md.it.bcm.bugzilla.treatOpenAsAbandoned</param-name>
+        <param-value>true</param-value>
+    </context-param>
     <!-- End of user code
     -->
     <listener>

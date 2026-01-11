@@ -132,6 +132,17 @@ public class RestDelegate {
 
 		changeRequest.setAbout(resourcesFactory.constructURIForBugzillaChangeRequest(changeRequest.getIdentifier()));
 
+		String treatOpenAsAbandonedParam = httpServletRequest.getServletContext().getInitParameter("se.kth.md.it.bcm.bugzilla.treatOpenAsAbandoned");
+		boolean treatOpenAsAbandoned = Boolean.parseBoolean(treatOpenAsAbandonedParam);
+
+		if (treatOpenAsAbandoned) {
+			String status = bug.getStatus();
+			if ("NEW".equals(status) || "ASSIGNED".equals(status) || "REOPENED".equals(status)) {
+				changeRequest.setClosed(true);
+				changeRequest.addSubject("Status: Abandoned");
+			}
+		}
+
 		return changeRequest;
 	}
 
