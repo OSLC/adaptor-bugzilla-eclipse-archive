@@ -145,30 +145,52 @@
         <div class="collapse show" id="collapseDetails">
         <div class="card-body">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <dl class="row">
                         <% method = BugzillaChangeRequest.class.getMethod("getIdentifier"); %>
-                        <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-                        <dd class="col-sm-8">
+                        <dt class="col-sm-6 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
+                        <dd class="col-sm-6">
                         <% if (aBugzillaChangeRequest.getIdentifier() == null) { out.write("<em>null</em>"); } else { out.write(aBugzillaChangeRequest.getIdentifier().toString()); } %>
                         </dd>
                     </dl>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <dl class="row">
-                        <% method = BugzillaChangeRequest.class.getMethod("getShortTitle"); %>
-                        <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-                        <dd class="col-sm-8">
-                        <% if (aBugzillaChangeRequest.getShortTitle() == null) { out.write("<em>null</em>"); } else { out.write(aBugzillaChangeRequest.getShortTitle().toString()); } %>
+                        <% method = BugzillaChangeRequest.class.getMethod("getTitle"); %>
+                        <dt class="col-sm-3 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
+                        <dd class="col-sm-9">
+                        <% if (aBugzillaChangeRequest.getTitle() == null) { out.write("<em>null</em>"); } else { out.write(aBugzillaChangeRequest.getTitle().toString()); } %>
                         </dd>
                     </dl>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-4">
                     <dl class="row">
-                        <% method = BugzillaChangeRequest.class.getMethod("getTitle"); %>
-                        <dt class="col-sm-2 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-                        <dd class="col-sm-10">
-                        <% if (aBugzillaChangeRequest.getTitle() == null) { out.write("<em>null</em>"); } else { out.write(aBugzillaChangeRequest.getTitle().toString()); } %>
+                        <% method = BugzillaChangeRequest.class.getMethod("getStatus"); %>
+                        <dt class="col-sm-6 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
+                        <dd class="col-sm-6">
+                        <% 
+                        if (aBugzillaChangeRequest.getStatus() == null) { 
+                            out.write("<em>null</em>"); 
+                        } else { 
+                            String status = aBugzillaChangeRequest.getStatus().toString();
+                            String badgeClass = "bg-secondary";
+                            if (status.equalsIgnoreCase("NEW") || status.equalsIgnoreCase("UNCONFIRMED")) badgeClass = "bg-primary";
+                            else if (status.equalsIgnoreCase("RESOLVED") || status.equalsIgnoreCase("VERIFIED")) badgeClass = "bg-success";
+                            else if (status.equalsIgnoreCase("CLOSED")) badgeClass = "bg-dark";
+                            else if (status.equalsIgnoreCase("IN_PROGRESS") || status.equalsIgnoreCase("ASSIGNED")) badgeClass = "bg-info text-dark";
+                            
+                            out.write("<span class=\"badge rounded-pill " + badgeClass + "\">" + status + "</span>"); 
+                        } 
+                        %>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-md-8">
+                    <dl class="row">
+                        <% method = BugzillaChangeRequest.class.getMethod("getShortTitle"); %>
+                        <dt class="col-sm-3 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
+                        <dd class="col-sm-9">
+                        <% if (aBugzillaChangeRequest.getShortTitle() == null) { out.write("<em>null</em>"); } else { out.write(aBugzillaChangeRequest.getShortTitle().toString()); } %>
                         </dd>
                     </dl>
                 </div>
@@ -338,15 +360,6 @@
             <div class="row">
                 <div class="col-md-6">
                     <dl class="row">
-                        <% method = BugzillaChangeRequest.class.getMethod("getStatus"); %>
-                        <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-                        <dd class="col-sm-8">
-                        <% if (aBugzillaChangeRequest.getStatus() == null) { out.write("<em>null</em>"); } else { out.write(aBugzillaChangeRequest.getStatus().toString()); } %>
-                        </dd>
-                    </dl>
-                </div>
-                <div class="col-md-6">
-                    <dl class="row">
                         <% method = BugzillaChangeRequest.class.getMethod("getCloseDate"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
@@ -413,7 +426,7 @@
                         <% method = BugzillaChangeRequest.class.getMethod("getDiscussedBy"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
-                        <% if ((aBugzillaChangeRequest.getDiscussedBy() == null) || (aBugzillaChangeRequest.getDiscussedBy().getValue() == null)) { out.write("<em>null</em>"); } else { out.write("<a href=\"" + aBugzillaChangeRequest.getDiscussedBy().getValue().toString() + "\" class=\"oslc-resource-link\">" + aBugzillaChangeRequest.getDiscussedBy().getValue().toString() + "</a>"); } %>
+                        <% if ((aBugzillaChangeRequest.getDiscussedBy() == null) || (aBugzillaChangeRequest.getDiscussedBy().getValue() == null)) { out.write("<em>null</em>"); } else { out.write("<a href=\"" + aBugzillaChangeRequest.getDiscussedBy().getValue().toString() + "\" class=\"oslc-resource-link\">"); out.write(aBugzillaChangeRequest.getDiscussedBy().getValue().toString()); out.write("</a>"); } %>
                         </dd>
                     </dl>
                 </div>
@@ -446,7 +459,7 @@
                                 out.write("<li>" + "<em>null</em>" + "</li>");
                             }
                             else {
-                                out.write("<li>" + "<a href=\"" + next.getValue().toString() + "\" class=\"oslc-resource-link\">".toString() + next.getValue().toString() + "</a>" + "</li>");
+                                out.write("<li>" + "<a href=\"" + next.getValue().toString() + "\" class=\"oslc-resource-link\">" + next.getValue().toString() + "</a>" + "</li>");
                             }
                         }
                         %> 
@@ -511,7 +524,7 @@
                         <% method = BugzillaChangeRequest.class.getMethod("getInstanceShape"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
-                        <% if ((aBugzillaChangeRequest.getInstanceShape() == null) || (aBugzillaChangeRequest.getInstanceShape().getValue() == null)) { out.write("<em>null</em>"); } else { out.write("<a href=\"" + aBugzillaChangeRequest.getInstanceShape().getValue().toString() + "\" class=\"oslc-resource-link\">".toString() + aBugzillaChangeRequest.getInstanceShape().getValue().toString() + "</a>"); } %>
+                        <% if ((aBugzillaChangeRequest.getInstanceShape() == null) || (aBugzillaChangeRequest.getInstanceShape().getValue() == null)) { out.write("<em>null</em>"); } else { out.write("<a href=\"" + aBugzillaChangeRequest.getInstanceShape().getValue().toString() + "\" class=\"oslc-resource-link\">"); out.write(aBugzillaChangeRequest.getInstanceShape().getValue().toString()); out.write("</a>"); } %>
                         </dd>
                     </dl>
                 </div>
