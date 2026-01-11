@@ -13,6 +13,9 @@ public class Bug {
     private String platform;
     private String operatingSystem;
     private String assignedTo;
+    private String assignedToName;
+    private String reporterEmail;
+    private String reporterName;
     private String description;
     private Date creationTime;
     private Date lastChangeTime;
@@ -49,6 +52,15 @@ public class Bug {
 
     public String getAssignedTo() { return assignedTo; }
     public void setAssignedTo(String assignedTo) { this.assignedTo = assignedTo; }
+
+    public String getAssignedToName() { return assignedToName; }
+    public void setAssignedToName(String assignedToName) { this.assignedToName = assignedToName; }
+
+    public String getReporterEmail() { return reporterEmail; }
+    public void setReporterEmail(String reporterEmail) { this.reporterEmail = reporterEmail; }
+
+    public String getReporterName() { return reporterName; }
+    public void setReporterName(String reporterName) { this.reporterName = reporterName; }
 
     public Date getCreationTime() { return creationTime; }
     public void setCreationTime(Date creationTime) { this.creationTime = creationTime; }

@@ -37,6 +37,7 @@
 
 <%@page import="se.kth.md.it.bcm.resources.BugzillaChangeRequest"%>
 <%@page import="se.kth.md.it.bcm.resources.BugzDomainConstants"%>
+<%@page import="se.kth.md.it.bcm.resources.Person"%>
 
 <%@ page contentType="text/html" language="java" pageEncoding="UTF-8" %>
 
@@ -219,11 +220,18 @@
                         <% method = BugzillaChangeRequest.class.getMethod("getCreator"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
-                        <ul>
-                        <% for(Object next : aBugzillaChangeRequest.getCreator()) { %>
-                            <li><jsp:include page="/se/kth/md/it/bcm/persontohtml.jsp"><jsp:param name="asLocalResource" value="true"/></jsp:include></li>
-                        <% } %>
-                        </ul>
+                        <% 
+                        Iterator<Person> creatorItr = aBugzillaChangeRequest.getCreator().iterator();
+                        while(creatorItr.hasNext()) {
+                            Person next = creatorItr.next();
+                            request.setAttribute("aPerson", next); 
+                        %>
+                            <jsp:include page="/se/kth/md/it/bcm/persontohtml.jsp"><jsp:param name="asLocalResource" value="true"/></jsp:include>
+                        <% 
+                            request.removeAttribute("aPerson");
+                            if (creatorItr.hasNext()) { out.write(", "); }
+                        } 
+                        %>
                         </dd>
                     </dl>
                 </div>
@@ -241,11 +249,18 @@
                         <% method = BugzillaChangeRequest.class.getMethod("getContributor"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
-                        <ul>
-                        <% for(Object next : aBugzillaChangeRequest.getContributor()) { %>
-                            <li><jsp:include page="/se/kth/md/it/bcm/persontohtml.jsp"><jsp:param name="asLocalResource" value="true"/></jsp:include></li>
-                        <% } %>
-                        </ul>
+                        <% 
+                        Iterator<Person> contributorItr = aBugzillaChangeRequest.getContributor().iterator();
+                        while(contributorItr.hasNext()) {
+                            Person next = contributorItr.next();
+                            request.setAttribute("aPerson", next); 
+                        %>
+                            <jsp:include page="/se/kth/md/it/bcm/persontohtml.jsp"><jsp:param name="asLocalResource" value="true"/></jsp:include>
+                        <% 
+                            request.removeAttribute("aPerson");
+                            if (contributorItr.hasNext()) { out.write(", "); }
+                        } 
+                        %>
                         </dd>
                     </dl>
                 </div>

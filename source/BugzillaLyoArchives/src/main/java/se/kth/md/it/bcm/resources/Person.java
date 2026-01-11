@@ -126,7 +126,13 @@ public class Person
         // End of user code
     
         if (asLocalResource) {
-            result = result + "{a Local Person Resource} - update Person.toString() to present resource as desired.";
+            if (name != null) {
+                result = name;
+            } else if (givenName != null || familyName != null) {
+                result = (givenName != null ? givenName : "") + (givenName != null && familyName != null ? " " : "") + (familyName != null ? familyName : "");
+            } else {
+                result = "Unnamed Person";
+            }
             // Start of user code toString_bodyForLocalResource
             // End of user code
         }
