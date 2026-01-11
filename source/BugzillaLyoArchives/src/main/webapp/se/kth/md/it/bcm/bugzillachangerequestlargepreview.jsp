@@ -424,15 +424,13 @@
         <% method = BugzillaChangeRequest.class.getMethod("getSubject"); %>
         <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
         <dd>
-        <ul>
-        <%
-        Iterator<String> subjectItr = aBugzillaChangeRequest.getSubject().iterator();
-        while(subjectItr.hasNext()) {
-            out.write("<li>" + subjectItr.next().toString() + "</li>");
-        }
+        <% 
+        for(String next : aBugzillaChangeRequest.getSubject()) { 
+            String pillClass = "bg-secondary";
+            if ("Status: Abandoned".equals(next)) pillClass = "bg-danger";
+            out.write("<span class=\"badge rounded-pill " + pillClass + " me-1\">" + next + "</span>"); 
+        } 
         %>
-        </ul>
-        
         </dd>
     </dl>
     <dl class="dl-horizontal">

@@ -173,7 +173,12 @@
                         } else { 
                             String status = aBugzillaChangeRequest.getStatus().toString();
                             String badgeClass = "bg-secondary";
-                            if (status.equalsIgnoreCase("NEW") || status.equalsIgnoreCase("UNCONFIRMED")) badgeClass = "bg-primary";
+                            if (status.equalsIgnoreCase("NEW") || status.equalsIgnoreCase("UNCONFIRMED")) {
+                                badgeClass = "bg-primary";
+                                if (aBugzillaChangeRequest.getSubject().contains("Status: Abandoned")) {
+                                    badgeClass = "bg-warning text-dark";
+                                }
+                            }
                             else if (status.equalsIgnoreCase("RESOLVED") || status.equalsIgnoreCase("VERIFIED")) badgeClass = "bg-success";
                             else if (status.equalsIgnoreCase("CLOSED")) badgeClass = "bg-dark";
                             else if (status.equalsIgnoreCase("IN_PROGRESS") || status.equalsIgnoreCase("ASSIGNED")) badgeClass = "bg-info text-dark";
@@ -354,9 +359,13 @@
                         <% method = BugzillaChangeRequest.class.getMethod("getSubject"); %>
                         <dt class="col-sm-4 text-end"><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
                         <dd class="col-sm-8">
-                        <ul>
-                        <% Iterator<String> subjectItr = aBugzillaChangeRequest.getSubject().iterator(); while(subjectItr.hasNext()) { out.write("<li>" + subjectItr.next().toString() + "</li>"); } %>
-                        </ul>
+                        <% 
+                        for(String next : aBugzillaChangeRequest.getSubject()) { 
+                            String pillClass = "bg-secondary";
+                            if ("Status: Abandoned".equals(next)) pillClass = "bg-danger";
+                            out.write("<span class=\"badge rounded-pill " + pillClass + " me-1\">" + next + "</span>"); 
+                        } 
+                        %>
                         </dd>
                     </dl>
                 </div>

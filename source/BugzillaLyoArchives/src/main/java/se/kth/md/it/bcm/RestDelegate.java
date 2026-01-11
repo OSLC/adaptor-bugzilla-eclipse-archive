@@ -139,6 +139,7 @@ public class RestDelegate {
 			String status = bug.getStatus();
 			if ("NEW".equals(status) || "ASSIGNED".equals(status) || "REOPENED".equals(status)) {
 				changeRequest.setClosed(true);
+				changeRequest.setStatus("CLOSED");
 				changeRequest.addSubject("Status: Abandoned");
 			}
 		}
