@@ -83,6 +83,7 @@ public class RestDelegate {
 		BugzillaChangeRequest changeRequest = new BugzillaChangeRequest();
 		changeRequest.setIdentifier(Integer.toString(bug.getID()));
 		changeRequest.setTitle(bug.getSummary());
+		changeRequest.setDescription(bug.getDescription());
 		changeRequest.setStatus(bug.getStatus());
 
 		String assignedTo = bug.getAssignedTo();

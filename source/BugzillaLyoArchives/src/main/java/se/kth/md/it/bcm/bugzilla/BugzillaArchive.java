@@ -91,6 +91,16 @@ public class BugzillaArchive {
                          bug.setAssignedTo(assignedToNodes.item(0).getTextContent());
                     }
 
+                    NodeList longDescNodes = eElement.getElementsByTagName("long_desc");
+                    for (int i = 0; i < longDescNodes.getLength(); i++) {
+                        Element longDescElement = (Element) longDescNodes.item(i);
+                        String commentCount = getElementValue(longDescElement, "comment_count");
+                        if ("0".equals(commentCount)) {
+                            bug.setDescription(getElementValue(longDescElement, "thetext"));
+                            break;
+                        }
+                    }
+
                     bugs.put(bug.getID(), bug);
 
                     // Populate product components structure

@@ -13,6 +13,7 @@ public class Bug {
     private String platform;
     private String operatingSystem;
     private String assignedTo;
+    private String description;
     private Date creationTime;
     private Date lastChangeTime;
 
@@ -21,6 +22,9 @@ public class Bug {
 
     public String getSummary() { return summary; }
     public void setSummary(String summary) { this.summary = summary; }
+    
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
