@@ -56,13 +56,13 @@
             height: 100%;
             margin: 0;
             padding: 0;
-            overflow-y: auto;
+            overflow: hidden;
             background-color: #ffffff;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         .preview-container {
-            padding: 8px 12px;
-            min-height: 100%;
+            padding: 6px 10px;
+            height: 100%;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -72,29 +72,29 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             border-bottom: 1px solid #e9ecef;
-            padding-bottom: 4px;
+            padding-bottom: 2px;
         }
         .description-text {
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             color: #495057;
-            line-height: 1.35;
-            margin-bottom: 8px;
+            line-height: 1.3;
+            margin-bottom: 4px;
             display: -webkit-box;
-            -webkit-line-clamp: 2;
+            -webkit-line-clamp: 1;
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
             font-style: italic;
         }
         .meta-row {
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             color: #495057;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
             display: flex;
             flex-wrap: wrap;
-            gap: 2px 10px;
+            gap: 2px 8px;
         }
         .meta-label {
             font-weight: 600;
@@ -105,11 +105,11 @@
         }
         .preview-footer {
             border-top: 1px solid #e9ecef;
-            padding-top: 4px;
-            margin-top: 6px;
+            padding-top: 2px;
+            margin-top: 4px;
             display: flex;
             justify-content: space-between;
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             color: #868e96;
         }
     </style>
