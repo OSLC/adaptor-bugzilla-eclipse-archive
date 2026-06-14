@@ -53,20 +53,30 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
         html, body {
+            height: 100%;
             margin: 0;
             padding: 0;
             background-color: #ffffff;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden;
         }
         .preview-container {
-            padding: 8px 12px;
+            height: 100%;
+            padding: 12px 16px;
             box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
         .status-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
             border-bottom: 1px solid #e9ecef;
             padding-bottom: 4px;
         }
@@ -74,7 +84,6 @@
             font-size: 0.76rem;
             color: #495057;
             line-height: 1.35;
-            margin-bottom: 8px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -85,7 +94,6 @@
         .meta-row {
             font-size: 0.76rem;
             color: #495057;
-            margin-bottom: 6px;
             display: flex;
             flex-wrap: wrap;
             gap: 2px 10px;
@@ -99,7 +107,7 @@
         }
         .preview-footer {
             border-top: 1px solid #e9ecef;
-            padding-top: 4px;
+            padding-top: 6px;
             display: flex;
             justify-content: space-between;
             font-size: 0.68rem;
@@ -143,35 +151,37 @@ if (aBugzillaChangeRequest.getCreator() != null && !aBugzillaChangeRequest.getCr
 }
 %>
 <div class="preview-container">
-    <div class="status-row">
-        <div>
-            <span class="meta-label" style="font-size: 0.8rem;">Status:</span>
-            <span class="badge <%= statusBadgeClass %>" style="font-size: 0.72rem; padding: 2px 6px;"><%= status %></span>
+    <div class="main-content">
+        <div class="status-row">
+            <div>
+                <span class="meta-label" style="font-size: 0.8rem;">Status:</span>
+                <span class="badge <%= statusBadgeClass %>" style="font-size: 0.72rem; padding: 2px 6px;"><%= status %></span>
+            </div>
+            <div>
+                <span class="meta-label" style="font-size: 0.8rem;">Priority:</span>
+                <span class="badge <%= priorityBadgeClass %>" style="font-size: 0.72rem; padding: 2px 6px;"><%= priority %></span>
+            </div>
         </div>
-        <div>
-            <span class="meta-label" style="font-size: 0.8rem;">Priority:</span>
-            <span class="badge <%= priorityBadgeClass %>" style="font-size: 0.72rem; padding: 2px 6px;"><%= priority %></span>
-        </div>
-    </div>
-    
-    <% if (aBugzillaChangeRequest.getDescription() != null && !aBugzillaChangeRequest.getDescription().trim().isEmpty()) { %>
-        <div class="description-text" title="<%= aBugzillaChangeRequest.getDescription().replace("\"", "&quot;") %>">
-            <%= aBugzillaChangeRequest.getDescription() %>
-        </div>
-    <% } %>
-    
-    <div class="meta-row">
-        <div>
-            <span class="meta-label">Product:</span>
-            <span class="meta-value"><%= aBugzillaChangeRequest.getProduct() != null ? aBugzillaChangeRequest.getProduct() : "n/a" %></span>
-        </div>
-        <div>
-            <span class="meta-label">Component:</span>
-            <span class="meta-value"><%= aBugzillaChangeRequest.getComponent() != null ? aBugzillaChangeRequest.getComponent() : "n/a" %></span>
-        </div>
-        <div>
-            <span class="meta-label">Platform:</span>
-            <span class="meta-value"><%= aBugzillaChangeRequest.getPlatform() != null ? aBugzillaChangeRequest.getPlatform() : "n/a" %></span>
+        
+        <% if (aBugzillaChangeRequest.getDescription() != null && !aBugzillaChangeRequest.getDescription().trim().isEmpty()) { %>
+            <div class="description-text" title="<%= aBugzillaChangeRequest.getDescription().replace("\"", "&quot;") %>">
+                <%= aBugzillaChangeRequest.getDescription() %>
+            </div>
+        <% } %>
+        
+        <div class="meta-row">
+            <div>
+                <span class="meta-label">Product:</span>
+                <span class="meta-value"><%= aBugzillaChangeRequest.getProduct() != null ? aBugzillaChangeRequest.getProduct() : "n/a" %></span>
+            </div>
+            <div>
+                <span class="meta-label">Component:</span>
+                <span class="meta-value"><%= aBugzillaChangeRequest.getComponent() != null ? aBugzillaChangeRequest.getComponent() : "n/a" %></span>
+            </div>
+            <div>
+                <span class="meta-label">Platform:</span>
+                <span class="meta-value"><%= aBugzillaChangeRequest.getPlatform() != null ? aBugzillaChangeRequest.getPlatform() : "n/a" %></span>
+            </div>
         </div>
     </div>
     
