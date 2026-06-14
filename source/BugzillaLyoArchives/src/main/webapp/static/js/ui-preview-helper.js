@@ -87,7 +87,8 @@ function setupUiPreviewOnPopover(oslcLinkElements) {
       placement: "auto",
       trigger: "manual",  // Use manual trigger to have better control
       boundary: 'viewport',
-      customClass: 'ui-preview-popover'
+      customClass: 'ui-preview-popover',
+      sanitize: false
     });
 
     // Function to show popover

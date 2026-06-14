@@ -67,6 +67,29 @@ code {
   overflow: hidden;
 }
 
+/* Overrides for OSLC UI Preview Popover */
+.ui-preview-popover {
+  width: 520px !important;
+  max-width: 90vw !important;
+  max-height: none !important;
+}
+
+.ui-preview-popover .popover-body {
+  padding: 0 !important;
+  height: 215px !important;
+  max-height: 215px !important;
+  max-width: none !important;
+  overflow: hidden !important;
+}
+
+.ui-preview-popover .popover-body iframe {
+  border: none !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  border-radius: 0 0 6px 6px !important;
+}
+
 #delegatedUI {
   width: 523px;
   height: 320px; /*this is selection; creation has 480px*/
