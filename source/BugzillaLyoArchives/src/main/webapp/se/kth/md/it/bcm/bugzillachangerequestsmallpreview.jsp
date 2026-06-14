@@ -56,13 +56,13 @@
             height: 100%;
             margin: 0;
             padding: 0;
-            overflow: hidden;
+            overflow-y: auto;
             background-color: #ffffff;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         .preview-container {
-            padding: 12px;
-            height: 100%;
+            padding: 8px 12px;
+            min-height: 100%;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -72,46 +72,44 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             border-bottom: 1px solid #e9ecef;
-            padding-bottom: 6px;
+            padding-bottom: 4px;
         }
         .description-text {
             font-size: 0.78rem;
             color: #495057;
             line-height: 1.35;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             display: -webkit-box;
-            -webkit-line-clamp: 3;
+            -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
             font-style: italic;
         }
-        .meta-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px 16px;
-            font-size: 0.8rem;
-            color: #333333;
-        }
-        .meta-item {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .meta-row {
+            font-size: 0.78rem;
+            color: #495057;
+            margin-bottom: 4px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px 10px;
         }
         .meta-label {
             font-weight: 600;
             color: #6c757d;
-            margin-right: 4px;
+        }
+        .meta-value {
+            color: #212529;
         }
         .preview-footer {
             border-top: 1px solid #e9ecef;
-            padding-top: 6px;
-            margin-top: 8px;
+            padding-top: 4px;
+            margin-top: 6px;
             display: flex;
             justify-content: space-between;
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             color: #868e96;
         }
     </style>
@@ -154,8 +152,14 @@ if (aBugzillaChangeRequest.getCreator() != null && !aBugzillaChangeRequest.getCr
 <div class="preview-container">
     <div>
         <div class="status-row">
-            <span class="meta-label" style="font-size: 0.85rem;">Status:</span>
-            <span class="badge <%= statusBadgeClass %>" style="font-size: 0.75rem;"><%= status %></span>
+            <div>
+                <span class="meta-label" style="font-size: 0.8rem;">Status:</span>
+                <span class="badge <%= statusBadgeClass %>" style="font-size: 0.72rem; padding: 2px 6px;"><%= status %></span>
+            </div>
+            <div>
+                <span class="meta-label" style="font-size: 0.8rem;">Priority:</span>
+                <span class="badge <%= priorityBadgeClass %>" style="font-size: 0.72rem; padding: 2px 6px;"><%= priority %></span>
+            </div>
         </div>
         
         <% if (aBugzillaChangeRequest.getDescription() != null && !aBugzillaChangeRequest.getDescription().trim().isEmpty()) { %>
@@ -166,28 +170,24 @@ if (aBugzillaChangeRequest.getCreator() != null && !aBugzillaChangeRequest.getCr
     </div>
     
     <div>
-        <div class="meta-grid">
-            <div class="meta-item">
+        <div class="meta-row">
+            <div>
                 <span class="meta-label">Product:</span>
-                <%= aBugzillaChangeRequest.getProduct() != null ? aBugzillaChangeRequest.getProduct() : "n/a" %>
+                <span class="meta-value"><%= aBugzillaChangeRequest.getProduct() != null ? aBugzillaChangeRequest.getProduct() : "n/a" %></span>
             </div>
-            <div class="meta-item">
+            <div>
                 <span class="meta-label">Component:</span>
-                <%= aBugzillaChangeRequest.getComponent() != null ? aBugzillaChangeRequest.getComponent() : "n/a" %>
+                <span class="meta-value"><%= aBugzillaChangeRequest.getComponent() != null ? aBugzillaChangeRequest.getComponent() : "n/a" %></span>
             </div>
-            <div class="meta-item">
-                <span class="meta-label">Priority:</span>
-                <span class="badge <%= priorityBadgeClass %>" style="font-size: 0.7rem; padding: 2px 6px;"><%= priority %></span>
-            </div>
-            <div class="meta-item">
+            <div>
                 <span class="meta-label">Platform:</span>
-                <%= aBugzillaChangeRequest.getPlatform() != null ? aBugzillaChangeRequest.getPlatform() : "n/a" %>
+                <span class="meta-value"><%= aBugzillaChangeRequest.getPlatform() != null ? aBugzillaChangeRequest.getPlatform() : "n/a" %></span>
             </div>
         </div>
         
         <div class="preview-footer">
             <span>Created: <%= aBugzillaChangeRequest.getCreated() != null ? new java.text.SimpleDateFormat("yyyy-MM-dd").format(aBugzillaChangeRequest.getCreated()) : "n/a" %></span>
-            <span class="text-truncate" style="max-width: 130px;" title="Creator: <%= creatorName %>">By: <%= creatorName %></span>
+            <span class="text-truncate" style="max-width: 120px;" title="Creator: <%= creatorName %>">By: <%= creatorName %></span>
         </div>
     </div>
 </div>
