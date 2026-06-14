@@ -76,6 +76,18 @@
             border-bottom: 1px solid #e9ecef;
             padding-bottom: 6px;
         }
+        .description-text {
+            font-size: 0.78rem;
+            color: #495057;
+            line-height: 1.35;
+            margin-bottom: 10px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-style: italic;
+        }
         .meta-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -140,33 +152,43 @@ if (aBugzillaChangeRequest.getCreator() != null && !aBugzillaChangeRequest.getCr
 }
 %>
 <div class="preview-container">
-    <div class="status-row">
-        <span class="meta-label" style="font-size: 0.85rem;">Status:</span>
-        <span class="badge <%= statusBadgeClass %>" style="font-size: 0.75rem;"><%= status %></span>
+    <div>
+        <div class="status-row">
+            <span class="meta-label" style="font-size: 0.85rem;">Status:</span>
+            <span class="badge <%= statusBadgeClass %>" style="font-size: 0.75rem;"><%= status %></span>
+        </div>
+        
+        <% if (aBugzillaChangeRequest.getDescription() != null && !aBugzillaChangeRequest.getDescription().trim().isEmpty()) { %>
+            <div class="description-text" title="<%= aBugzillaChangeRequest.getDescription().replace("\"", "&quot;") %>">
+                <%= aBugzillaChangeRequest.getDescription() %>
+            </div>
+        <% } %>
     </div>
     
-    <div class="meta-grid">
-        <div class="meta-item">
-            <span class="meta-label">Product:</span>
-            <%= aBugzillaChangeRequest.getProduct() != null ? aBugzillaChangeRequest.getProduct() : "n/a" %>
+    <div>
+        <div class="meta-grid">
+            <div class="meta-item">
+                <span class="meta-label">Product:</span>
+                <%= aBugzillaChangeRequest.getProduct() != null ? aBugzillaChangeRequest.getProduct() : "n/a" %>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Component:</span>
+                <%= aBugzillaChangeRequest.getComponent() != null ? aBugzillaChangeRequest.getComponent() : "n/a" %>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Priority:</span>
+                <span class="badge <%= priorityBadgeClass %>" style="font-size: 0.7rem; padding: 2px 6px;"><%= priority %></span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Platform:</span>
+                <%= aBugzillaChangeRequest.getPlatform() != null ? aBugzillaChangeRequest.getPlatform() : "n/a" %>
+            </div>
         </div>
-        <div class="meta-item">
-            <span class="meta-label">Component:</span>
-            <%= aBugzillaChangeRequest.getComponent() != null ? aBugzillaChangeRequest.getComponent() : "n/a" %>
+        
+        <div class="preview-footer">
+            <span>Created: <%= aBugzillaChangeRequest.getCreated() != null ? new java.text.SimpleDateFormat("yyyy-MM-dd").format(aBugzillaChangeRequest.getCreated()) : "n/a" %></span>
+            <span class="text-truncate" style="max-width: 130px;" title="Creator: <%= creatorName %>">By: <%= creatorName %></span>
         </div>
-        <div class="meta-item">
-            <span class="meta-label">Priority:</span>
-            <span class="badge <%= priorityBadgeClass %>" style="font-size: 0.7rem; padding: 2px 6px;"><%= priority %></span>
-        </div>
-        <div class="meta-item">
-            <span class="meta-label">Platform:</span>
-            <%= aBugzillaChangeRequest.getPlatform() != null ? aBugzillaChangeRequest.getPlatform() : "n/a" %>
-        </div>
-    </div>
-    
-    <div class="preview-footer">
-        <span>Created: <%= aBugzillaChangeRequest.getCreated() != null ? new java.text.SimpleDateFormat("yyyy-MM-dd").format(aBugzillaChangeRequest.getCreated()) : "n/a" %></span>
-        <span class="text-truncate" style="max-width: 130px;" title="Creator: <%= creatorName %>">By: <%= creatorName %></span>
     </div>
 </div>
 </body>
