@@ -51,7 +51,7 @@ function setupUiPreviewOnPopover(oslcLinkElements) {
       }
       .ui-preview-popover .popover-body {
         pointer-events: auto;
-        padding: 8px;
+        padding: 0;
         height: 450px;
         overflow: hidden;
         display: flex;
@@ -61,10 +61,9 @@ function setupUiPreviewOnPopover(oslcLinkElements) {
         border: none;
         width: 100%;
         height: 100%;
-        min-height: 400px;
         display: block;
         flex: 1;
-        border-radius: 4px;
+        border-radius: 0 0 6px 6px;
       }
     `;
     document.head.appendChild(style);
@@ -88,7 +87,8 @@ function setupUiPreviewOnPopover(oslcLinkElements) {
       placement: "auto",
       trigger: "manual",  // Use manual trigger to have better control
       boundary: 'viewport',
-      customClass: 'ui-preview-popover'
+      customClass: 'ui-preview-popover',
+      sanitize: false
     });
 
     // Function to show popover

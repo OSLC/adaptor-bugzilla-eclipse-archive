@@ -253,6 +253,7 @@
         <ul>
         <%
         for(Object next : aBugzillaChangeRequest.getContributor()) {
+            request.setAttribute("aPerson", next);
             %>
             <li> 
             <jsp:include page="/se/kth/md/it/bcm/persontohtml.jsp">
@@ -260,6 +261,7 @@
                 </jsp:include>
             </li> 
             <%
+            request.removeAttribute("aPerson");
         }
         %>
         </ul>
@@ -273,6 +275,7 @@
         <ul>
         <%
         for(Object next : aBugzillaChangeRequest.getCreator()) {
+            request.setAttribute("aPerson", next);
             %>
             <li> 
             <jsp:include page="/se/kth/md/it/bcm/persontohtml.jsp">
@@ -280,6 +283,7 @@
                 </jsp:include>
             </li> 
             <%
+            request.removeAttribute("aPerson");
         }
         %>
         </ul>
