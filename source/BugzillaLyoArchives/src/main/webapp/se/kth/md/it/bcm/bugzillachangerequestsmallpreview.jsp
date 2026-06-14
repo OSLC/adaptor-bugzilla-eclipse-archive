@@ -57,52 +57,31 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background-color: transparent;
+            background-color: #ffffff;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
-        .preview-card {
+        .preview-container {
+            padding: 12px;
             height: 100%;
+            box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            background: #ffffff;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            overflow: hidden;
+            justify-content: space-between;
         }
-        .preview-header {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-bottom: 1px solid #dee2e6;
-            padding: 8px 12px;
+        .status-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-        .preview-body {
-            padding: 10px 12px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .bug-title {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #212529;
-            margin-bottom: 6px;
-            line-height: 1.25;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;  
-            overflow: hidden;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 6px;
         }
         .meta-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 4px 8px;
-            font-size: 0.75rem;
-            color: #495057;
-            margin-bottom: 6px;
+            gap: 8px 16px;
+            font-size: 0.8rem;
+            color: #333333;
         }
         .meta-item {
             white-space: nowrap;
@@ -110,15 +89,17 @@
             text-overflow: ellipsis;
         }
         .meta-label {
-            font-weight: 500;
+            font-weight: 600;
             color: #6c757d;
+            margin-right: 4px;
         }
         .preview-footer {
             border-top: 1px solid #e9ecef;
             padding-top: 6px;
+            margin-top: 8px;
             display: flex;
             justify-content: space-between;
-            font-size: 0.68rem;
+            font-size: 0.72rem;
             color: #868e96;
         }
     </style>
@@ -158,40 +139,34 @@ if (aBugzillaChangeRequest.getCreator() != null && !aBugzillaChangeRequest.getCr
     }
 }
 %>
-<div class="preview-card">
-    <div class="preview-header">
-        <span class="badge bg-dark text-white">Bug <%= aBugzillaChangeRequest.getIdentifier() != null ? aBugzillaChangeRequest.getIdentifier() : "n/a" %></span>
-        <span class="badge <%= statusBadgeClass %>"><%= status %></span>
+<div class="preview-container">
+    <div class="status-row">
+        <span class="meta-label" style="font-size: 0.85rem;">Status:</span>
+        <span class="badge <%= statusBadgeClass %>" style="font-size: 0.75rem;"><%= status %></span>
     </div>
     
-    <div class="preview-body">
-        <div class="bug-title" title="<%= aBugzillaChangeRequest.getTitle() %>">
-            <%= aBugzillaChangeRequest.getTitle() != null ? aBugzillaChangeRequest.getTitle() : "No Title" %>
+    <div class="meta-grid">
+        <div class="meta-item">
+            <span class="meta-label">Product:</span>
+            <%= aBugzillaChangeRequest.getProduct() != null ? aBugzillaChangeRequest.getProduct() : "n/a" %>
         </div>
-        
-        <div class="meta-grid">
-            <div class="meta-item">
-                <span class="meta-label">Product:</span> 
-                <%= aBugzillaChangeRequest.getProduct() != null ? aBugzillaChangeRequest.getProduct() : "n/a" %>
-            </div>
-            <div class="meta-item">
-                <span class="meta-label">Component:</span> 
-                <%= aBugzillaChangeRequest.getComponent() != null ? aBugzillaChangeRequest.getComponent() : "n/a" %>
-            </div>
-            <div class="meta-item">
-                <span class="meta-label">Priority:</span> 
-                <span class="badge <%= priorityBadgeClass %>" style="font-size: 0.65rem; padding: 2px 5px;"><%= priority %></span>
-            </div>
-            <div class="meta-item">
-                <span class="meta-label">Platform:</span> 
-                <%= aBugzillaChangeRequest.getPlatform() != null ? aBugzillaChangeRequest.getPlatform() : "n/a" %>
-            </div>
+        <div class="meta-item">
+            <span class="meta-label">Component:</span>
+            <%= aBugzillaChangeRequest.getComponent() != null ? aBugzillaChangeRequest.getComponent() : "n/a" %>
         </div>
-        
-        <div class="preview-footer">
-            <span>Created: <%= aBugzillaChangeRequest.getCreated() != null ? new java.text.SimpleDateFormat("yyyy-MM-dd").format(aBugzillaChangeRequest.getCreated()) : "n/a" %></span>
-            <span class="text-truncate" style="max-width: 130px;" title="Creator: <%= creatorName %>">By: <%= creatorName %></span>
+        <div class="meta-item">
+            <span class="meta-label">Priority:</span>
+            <span class="badge <%= priorityBadgeClass %>" style="font-size: 0.7rem; padding: 2px 6px;"><%= priority %></span>
         </div>
+        <div class="meta-item">
+            <span class="meta-label">Platform:</span>
+            <%= aBugzillaChangeRequest.getPlatform() != null ? aBugzillaChangeRequest.getPlatform() : "n/a" %>
+        </div>
+    </div>
+    
+    <div class="preview-footer">
+        <span>Created: <%= aBugzillaChangeRequest.getCreated() != null ? new java.text.SimpleDateFormat("yyyy-MM-dd").format(aBugzillaChangeRequest.getCreated()) : "n/a" %></span>
+        <span class="text-truncate" style="max-width: 130px;" title="Creator: <%= creatorName %>">By: <%= creatorName %></span>
     </div>
 </div>
 </body>
