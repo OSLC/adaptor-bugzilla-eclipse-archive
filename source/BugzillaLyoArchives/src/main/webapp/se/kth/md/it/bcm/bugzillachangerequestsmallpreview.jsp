@@ -51,741 +51,148 @@
     <title><%= aBugzillaChangeRequest.toString() %></title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-    <link href="<c:url value="/static/css/adaptor.css"/>" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        .preview-card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        .preview-header {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-bottom: 1px solid #dee2e6;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .preview-body {
+            padding: 10px 12px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .bug-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 6px;
+            line-height: 1.25;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;  
+            overflow: hidden;
+        }
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px 8px;
+            font-size: 0.75rem;
+            color: #495057;
+            margin-bottom: 6px;
+        }
+        .meta-item {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .meta-label {
+            font-weight: 500;
+            color: #6c757d;
+        }
+        .preview-footer {
+            border-top: 1px solid #e9ecef;
+            padding-top: 6px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.68rem;
+            color: #868e96;
+        }
+    </style>
 </head>
 
 <body>
+<%
+String status = aBugzillaChangeRequest.getStatus() != null ? aBugzillaChangeRequest.getStatus() : "Unknown";
+String statusBadgeClass = "bg-secondary text-white";
+if (status.equalsIgnoreCase("new") || status.equalsIgnoreCase("assigned") || status.equalsIgnoreCase("reopened")) {
+    statusBadgeClass = "bg-primary text-white";
+} else if (status.equalsIgnoreCase("resolved") || status.equalsIgnoreCase("verified")) {
+    statusBadgeClass = "bg-success text-white";
+}
 
-<!-- Begin page content -->
-<div>
-    <% Method method = null; %>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getPriority"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <%
-        if (aBugzillaChangeRequest.getPriority() == null) {
-            out.write("<em>null</em>");
+String priority = aBugzillaChangeRequest.getPriority() != null ? aBugzillaChangeRequest.getPriority() : "n/a";
+String priorityBadgeClass = "bg-secondary text-white";
+if (priority.equalsIgnoreCase("P1") || priority.equalsIgnoreCase("high") || priority.equalsIgnoreCase("highest")) {
+    priorityBadgeClass = "bg-danger text-white";
+} else if (priority.equalsIgnoreCase("P2") || priority.equalsIgnoreCase("normal")) {
+    priorityBadgeClass = "bg-warning text-dark";
+} else if (priority.equalsIgnoreCase("P3") || priority.equalsIgnoreCase("low")) {
+    priorityBadgeClass = "bg-light text-dark border";
+}
+
+String creatorName = "unnamed";
+if (aBugzillaChangeRequest.getCreator() != null && !aBugzillaChangeRequest.getCreator().isEmpty()) {
+    se.kth.md.it.bcm.resources.Person creator = aBugzillaChangeRequest.getCreator().iterator().next();
+    if (creator != null) {
+        if (creator.getName() != null) {
+            creatorName = creator.getName();
+        } else if (creator.getGivenName() != null || creator.getFamilyName() != null) {
+            creatorName = (creator.getGivenName() != null ? creator.getGivenName() : "") 
+                        + (creator.getGivenName() != null && creator.getFamilyName() != null ? " " : "") 
+                        + (creator.getFamilyName() != null ? creator.getFamilyName() : "");
         }
-        else {
-            out.write(aBugzillaChangeRequest.getPriority().toString());
-        }
-        %>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getPlatform"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <%
-        if (aBugzillaChangeRequest.getPlatform() == null) {
-            out.write("<em>null</em>");
-        }
-        else {
-            out.write(aBugzillaChangeRequest.getPlatform().toString());
-        }
-        %>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getVersion"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <%
-        if (aBugzillaChangeRequest.getVersion() == null) {
-            out.write("<em>null</em>");
-        }
-        else {
-            out.write(aBugzillaChangeRequest.getVersion().toString());
-        }
-        %>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getComponent"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <%
-        if (aBugzillaChangeRequest.getComponent() == null) {
-            out.write("<em>null</em>");
-        }
-        else {
-            out.write(aBugzillaChangeRequest.getComponent().toString());
-        }
-        %>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getProduct"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <%
-        if (aBugzillaChangeRequest.getProduct() == null) {
-            out.write("<em>null</em>");
-        }
-        else {
-            out.write(aBugzillaChangeRequest.getProduct().toString());
-        }
-        %>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getOperatingSystem"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <%
-        if (aBugzillaChangeRequest.getOperatingSystem() == null) {
-            out.write("<em>null</em>");
-        }
-        else {
-            out.write(aBugzillaChangeRequest.getOperatingSystem().toString());
-        }
-        %>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getAffectedByDefect"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <ul>
-        <%
-        for(Link next : aBugzillaChangeRequest.getAffectedByDefect()) {
-            if (next.getValue() == null) {
-                out.write("<li>" + "<em>null</em>" + "</li>");
-            }
-            else {
-                out.write("<li>" + "<a href=\"" + next.getValue().toString() + "\" class=\"oslc-resource-link\">" + next.getValue().toString() + "</a>" + "</li>");
-            }
-        }
-        %>
-        </ul>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getAffectsPlanItem"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <ul>
-        <%
-        for(Link next : aBugzillaChangeRequest.getAffectsPlanItem()) {
-            if (next.getValue() == null) {
-                out.write("<li>" + "<em>null</em>" + "</li>");
-            }
-            else {
-                out.write("<li>" + "<a href=\"" + next.getValue().toString() + "\" class=\"oslc-resource-link\">" + next.getValue().toString() + "</a>" + "</li>");
-            }
-        }
-        %>
-        </ul>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getAffectsRequirement"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <ul>
-        <%
-        for(Link next : aBugzillaChangeRequest.getAffectsRequirement()) {
-            if (next.getValue() == null) {
-                out.write("<li>" + "<em>null</em>" + "</li>");
-            }
-            else {
-                out.write("<li>" + "<a href=\"" + next.getValue().toString() + "\" class=\"oslc-resource-link\">" + next.getValue().toString() + "</a>" + "</li>");
-            }
-        }
-        %>
-        </ul>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getAffectsTestResult"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <ul>
-        <%
-        for(Link next : aBugzillaChangeRequest.getAffectsTestResult()) {
-            if (next.getValue() == null) {
-                out.write("<li>" + "<em>null</em>" + "</li>");
-            }
-            else {
-                out.write("<li>" + "<a href=\"" + next.getValue().toString() + "\" class=\"oslc-resource-link\">" + next.getValue().toString() + "</a>" + "</li>");
-            }
-        }
-        %>
-        </ul>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getBlocksTestExecutionRecord"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <ul>
-        <%
-        for(Link next : aBugzillaChangeRequest.getBlocksTestExecutionRecord()) {
-            if (next.getValue() == null) {
-                out.write("<li>" + "<em>null</em>" + "</li>");
-            }
-            else {
-                out.write("<li>" + "<a href=\"" + next.getValue().toString() + "\" class=\"oslc-resource-link\">" + next.getValue().toString() + "</a>" + "</li>");
-            }
-        }
-        %>
-        </ul>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getContributor"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <ul>
-        <%
-        for(Object next : aBugzillaChangeRequest.getContributor()) {
-            request.setAttribute("aPerson", next);
-            %>
-            <li> 
-            <jsp:include page="/se/kth/md/it/bcm/persontohtml.jsp">
-                <jsp:param name="asLocalResource" value="true"/>
-                </jsp:include>
-            </li> 
-            <%
-            request.removeAttribute("aPerson");
-        }
-        %>
-        </ul>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getCreator"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <ul>
-        <%
-        for(Object next : aBugzillaChangeRequest.getCreator()) {
-            request.setAttribute("aPerson", next);
-            %>
-            <li> 
-            <jsp:include page="/se/kth/md/it/bcm/persontohtml.jsp">
-                <jsp:param name="asLocalResource" value="true"/>
-                </jsp:include>
-            </li> 
-            <%
-            request.removeAttribute("aPerson");
-        }
-        %>
-        </ul>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getDctermsType"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <ul>
-        <%
-        for(Object next : aBugzillaChangeRequest.getDctermsType()) {
-            %>
-            <li> 
-            <jsp:include page="/se/kth/md/it/bcm/typetohtml.jsp">
-                <jsp:param name="asLocalResource" value="true"/>
-                </jsp:include>
-            </li> 
-            <%
-        }
-        %>
-        </ul>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getImplementsRequirement"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <ul>
-        <%
-        for(Link next : aBugzillaChangeRequest.getImplementsRequirement()) {
-            if (next.getValue() == null) {
-                out.write("<li>" + "<em>null</em>" + "</li>");
-            }
-            else {
-                out.write("<li>" + "<a href=\"" + next.getValue().toString() + "\" class=\"oslc-resource-link\">" + next.getValue().toString() + "</a>" + "</li>");
-            }
-        }
-        %>
-        </ul>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getRelatedChangeRequest"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <ul>
-        <%
-        for(Link next : aBugzillaChangeRequest.getRelatedChangeRequest()) {
-            if (next.getValue() == null) {
-                out.write("<li>" + "<em>null</em>" + "</li>");
-            }
-            else {
-                out.write("<li>" + "<a href=\"" + next.getValue().toString() + "\" class=\"oslc-resource-link\">" + next.getValue().toString() + "</a>" + "</li>");
-            }
-        }
-        %>
-        </ul>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getRelatedTestCase"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <ul>
-        <%
-        for(Link next : aBugzillaChangeRequest.getRelatedTestCase()) {
-            if (next.getValue() == null) {
-                out.write("<li>" + "<em>null</em>" + "</li>");
-            }
-            else {
-                out.write("<li>" + "<a href=\"" + next.getValue().toString() + "\" class=\"oslc-resource-link\">" + next.getValue().toString() + "</a>" + "</li>");
-            }
-        }
-        %>
-        </ul>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getRelatedTestExecutionRecord"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <ul>
-        <%
-        for(Link next : aBugzillaChangeRequest.getRelatedTestExecutionRecord()) {
-            if (next.getValue() == null) {
-                out.write("<li>" + "<em>null</em>" + "</li>");
-            }
-            else {
-                out.write("<li>" + "<a href=\"" + next.getValue().toString() + "\" class=\"oslc-resource-link\">" + next.getValue().toString() + "</a>" + "</li>");
-            }
-        }
-        %>
-        </ul>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getRelatedTestPlan"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <ul>
-        <%
-        for(Link next : aBugzillaChangeRequest.getRelatedTestPlan()) {
-            if (next.getValue() == null) {
-                out.write("<li>" + "<em>null</em>" + "</li>");
-            }
-            else {
-                out.write("<li>" + "<a href=\"" + next.getValue().toString() + "\" class=\"oslc-resource-link\">" + next.getValue().toString() + "</a>" + "</li>");
-            }
-        }
-        %>
-        </ul>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getRelatedTestScript"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <ul>
-        <%
-        for(Link next : aBugzillaChangeRequest.getRelatedTestScript()) {
-            if (next.getValue() == null) {
-                out.write("<li>" + "<em>null</em>" + "</li>");
-            }
-            else {
-                out.write("<li>" + "<a href=\"" + next.getValue().toString() + "\" class=\"oslc-resource-link\">" + next.getValue().toString() + "</a>" + "</li>");
-            }
-        }
-        %>
-        </ul>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getSubject"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <% 
-        for(String next : aBugzillaChangeRequest.getSubject()) { 
-            String pillClass = "bg-secondary";
-            if ("Status: Abandoned".equals(next)) pillClass = "bg-danger";
-            out.write("<span class=\"badge rounded-pill " + pillClass + " me-1\">" + next + "</span>"); 
-        } 
-        %>
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getTestedByTestCase"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <ul>
-        <%
-        for(Link next : aBugzillaChangeRequest.getTestedByTestCase()) {
-            if (next.getValue() == null) {
-                out.write("<li>" + "<em>null</em>" + "</li>");
-            }
-            else {
-                out.write("<li>" + "<a href=\"" + next.getValue().toString() + "\" class=\"oslc-resource-link\">" + next.getValue().toString() + "</a>" + "</li>");
-            }
-        }
-        %>
-        </ul>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getTracksChangeSet"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <ul>
-        <%
-        for(Link next : aBugzillaChangeRequest.getTracksChangeSet()) {
-            if (next.getValue() == null) {
-                out.write("<li>" + "<em>null</em>" + "</li>");
-            }
-            else {
-                out.write("<li>" + "<a href=\"" + next.getValue().toString() + "\" class=\"oslc-resource-link\">" + next.getValue().toString() + "</a>" + "</li>");
-            }
-        }
-        %>
-        </ul>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getTracksRequirement"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <ul>
-        <%
-        for(Link next : aBugzillaChangeRequest.getTracksRequirement()) {
-            if (next.getValue() == null) {
-                out.write("<li>" + "<em>null</em>" + "</li>");
-            }
-            else {
-                out.write("<li>" + "<a href=\"" + next.getValue().toString() + "\" class=\"oslc-resource-link\">" + next.getValue().toString() + "</a>" + "</li>");
-            }
-        }
-        %>
-        </ul>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getRdfType"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <ul>
-        <%
-        Iterator<URI> rdfTypeItr = aBugzillaChangeRequest.getRdfType().iterator();
-        while(rdfTypeItr.hasNext()) {
-            out.write("<li>" + rdfTypeItr.next().toString() + "</li>");
-        }
-        %>
-        </ul>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("isApproved"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <%
-        if (aBugzillaChangeRequest.isApproved() == null) {
-            out.write("<em>null</em>");
-        }
-        else {
-            out.write(aBugzillaChangeRequest.isApproved().toString());
-        }
-        %>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("isClosed"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <%
-        if (aBugzillaChangeRequest.isClosed() == null) {
-            out.write("<em>null</em>");
-        }
-        else {
-            out.write(aBugzillaChangeRequest.isClosed().toString());
-        }
-        %>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getCloseDate"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <%
-        if (aBugzillaChangeRequest.getCloseDate() == null) {
-            out.write("<em>null</em>");
-        }
-        else {
-            out.write(aBugzillaChangeRequest.getCloseDate().toString());
-        }
-        %>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getCreated"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <%
-        if (aBugzillaChangeRequest.getCreated() == null) {
-            out.write("<em>null</em>");
-        }
-        else {
-            out.write(aBugzillaChangeRequest.getCreated().toString());
-        }
-        %>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getDescription"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <%
-        if (aBugzillaChangeRequest.getDescription() == null) {
-            out.write("<em>null</em>");
-        }
-        else {
-            out.write(aBugzillaChangeRequest.getDescription().toString());
-        }
-        %>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getDiscussedBy"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <%
-        if ((aBugzillaChangeRequest.getDiscussedBy() == null) || (aBugzillaChangeRequest.getDiscussedBy().getValue() == null)) {
-            out.write("<em>null</em>");
-        }
-        else {
-            out.write("<a href=\"" + aBugzillaChangeRequest.getDiscussedBy().getValue().toString() + "\" class=\"oslc-resource-link\">" + aBugzillaChangeRequest.getDiscussedBy().getValue().toString() + "</a>");
-        }
-        %>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("isFixed"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <%
-        if (aBugzillaChangeRequest.isFixed() == null) {
-            out.write("<em>null</em>");
-        }
-        else {
-            out.write(aBugzillaChangeRequest.isFixed().toString());
-        }
-        %>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getIdentifier"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <%
-        if (aBugzillaChangeRequest.getIdentifier() == null) {
-            out.write("<em>null</em>");
-        }
-        else {
-            out.write(aBugzillaChangeRequest.getIdentifier().toString());
-        }
-        %>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("isInprogress"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <%
-        if (aBugzillaChangeRequest.isInprogress() == null) {
-            out.write("<em>null</em>");
-        }
-        else {
-            out.write(aBugzillaChangeRequest.isInprogress().toString());
-        }
-        %>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getInstanceShape"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <%
-        if ((aBugzillaChangeRequest.getInstanceShape() == null) || (aBugzillaChangeRequest.getInstanceShape().getValue() == null)) {
-            out.write("<em>null</em>");
-        }
-        else {
-            out.write("<a href=\"" + aBugzillaChangeRequest.getInstanceShape().getValue().toString() + "\" class=\"oslc-resource-link\">" + aBugzillaChangeRequest.getInstanceShape().getValue().toString() + "</a>");
-        }
-        %>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getModified"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <%
-        if (aBugzillaChangeRequest.getModified() == null) {
-            out.write("<em>null</em>");
-        }
-        else {
-            out.write(aBugzillaChangeRequest.getModified().toString());
-        }
-        %>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("isReviewed"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <%
-        if (aBugzillaChangeRequest.isReviewed() == null) {
-            out.write("<em>null</em>");
-        }
-        else {
-            out.write(aBugzillaChangeRequest.isReviewed().toString());
-        }
-        %>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getServiceProvider"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <%
-        if (aBugzillaChangeRequest.getServiceProvider() == null) {
-            out.write("<em>null</em>");
-        }
-        else {
-            out.write(aBugzillaChangeRequest.getServiceProvider().toString());
-        }
-        %>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getShortTitle"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <%
-        if (aBugzillaChangeRequest.getShortTitle() == null) {
-            out.write("<em>null</em>");
-        }
-        else {
-            out.write(aBugzillaChangeRequest.getShortTitle().toString());
-        }
-        %>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getStatus"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <%
-        if (aBugzillaChangeRequest.getStatus() == null) {
-            out.write("<em>null</em>");
-        }
-        else {
-            out.write(aBugzillaChangeRequest.getStatus().toString());
-        }
-        %>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("getTitle"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <%
-        if (aBugzillaChangeRequest.getTitle() == null) {
-            out.write("<em>null</em>");
-        }
-        else {
-            out.write(aBugzillaChangeRequest.getTitle().toString());
-        }
-        %>
-        
-        </dd>
-    </dl>
-    <dl class="dl-horizontal">
-        <% method = BugzillaChangeRequest.class.getMethod("isVerified"); %>
-        <dt><a href="<%=method.getAnnotation(OslcPropertyDefinition.class).value() %>"><%=method.getAnnotation(OslcName.class).value()%></a></dt>
-        <dd>
-        <%
-        if (aBugzillaChangeRequest.isVerified() == null) {
-            out.write("<em>null</em>");
-        }
-        else {
-            out.write(aBugzillaChangeRequest.isVerified().toString());
-        }
-        %>
-        
-        </dd>
-    </dl>
-</div>
-<%
-Map<QName, Object> extendedProperties = aBugzillaChangeRequest.getExtendedProperties();
-if (!extendedProperties.isEmpty()) {
-%>
-    <div>
-    <%
-    for (Map.Entry<QName, Object> entry : extendedProperties.entrySet()) 
-    {
-        QName key = entry.getKey();
-        Object value = entry.getValue();
-    %>
-    <dl class="row">
-        <dt  class="col-sm-2 text-end"><a href="<%=key.getNamespaceURI() + key.getLocalPart() %>"><%=key.getLocalPart()%></a></dt>
-        <dd class="col-sm-9"><%= value.toString()%></dd>
-    </dl>
-    <%
     }
-    %>
-    </div>
-<%
 }
 %>
+<div class="preview-card">
+    <div class="preview-header">
+        <span class="badge bg-dark text-white">Bug <%= aBugzillaChangeRequest.getIdentifier() != null ? aBugzillaChangeRequest.getIdentifier() : "n/a" %></span>
+        <span class="badge <%= statusBadgeClass %>"><%= status %></span>
+    </div>
+    
+    <div class="preview-body">
+        <div class="bug-title" title="<%= aBugzillaChangeRequest.getTitle() %>">
+            <%= aBugzillaChangeRequest.getTitle() != null ? aBugzillaChangeRequest.getTitle() : "No Title" %>
+        </div>
+        
+        <div class="meta-grid">
+            <div class="meta-item">
+                <span class="meta-label">Product:</span> 
+                <%= aBugzillaChangeRequest.getProduct() != null ? aBugzillaChangeRequest.getProduct() : "n/a" %>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Component:</span> 
+                <%= aBugzillaChangeRequest.getComponent() != null ? aBugzillaChangeRequest.getComponent() : "n/a" %>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Priority:</span> 
+                <span class="badge <%= priorityBadgeClass %>" style="font-size: 0.65rem; padding: 2px 5px;"><%= priority %></span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Platform:</span> 
+                <%= aBugzillaChangeRequest.getPlatform() != null ? aBugzillaChangeRequest.getPlatform() : "n/a" %>
+            </div>
+        </div>
+        
+        <div class="preview-footer">
+            <span>Created: <%= aBugzillaChangeRequest.getCreated() != null ? new java.text.SimpleDateFormat("yyyy-MM-dd").format(aBugzillaChangeRequest.getCreated()) : "n/a" %></span>
+            <span class="text-truncate" style="max-width: 130px;" title="Creator: <%= creatorName %>">By: <%= creatorName %></span>
+        </div>
+    </div>
+</div>
 </body>
 </html>
