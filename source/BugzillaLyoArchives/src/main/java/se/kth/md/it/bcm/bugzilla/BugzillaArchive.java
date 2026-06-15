@@ -106,13 +106,34 @@ public class BugzillaArchive {
                         String commentCount = getElementValue(longDescElement, "comment_count");
                         String isPrivate = longDescElement.getAttribute("isprivate");
                         
+                        // Skip if comment_count is missing or invalid
+                        if (commentCount == null) {
+                            log.warn("Missing comment_count in long_desc element, skipping");
+                            continue;
+                        }
+                        
+                        int commentCountValue;
+                        try {
+                            commentCountValue = Integer.parseInt(commentCount);
+                        } catch (NumberFormatException e) {
+                            log.warn("Invalid comment_count value '" + commentCount + "', skipping");
+                            continue;
+                        }
+                        
                         Comment comment = new Comment();
-                        comment.setCommentCount(Integer.parseInt(commentCount));
+                        comment.setCommentCount(commentCountValue);
                         comment.setThetext(getElementValue(longDescElement, "thetext"));
                         
                         String commentIdStr = getElementValue(longDescElement, "commentid");
-                        if (commentIdStr != null) {
-                            comment.setCommentId(Integer.parseInt(commentIdStr));
+                        if (commentIdStr != null && !commentIdStr.trim().isEmpty()) {
+                            try {
+                                comment.setCommentId(Integer.parseInt(commentIdStr));
+                            } catch (NumberFormatException e) {
+                                log.warn("Invalid commentid value '" + commentIdStr + "', using 0");
+                                comment.setCommentId(0);
+                            }
+                        } else {
+                            comment.setCommentId(0);
                         }
                         
                         NodeList whoNodes = longDescElement.getElementsByTagName("who");

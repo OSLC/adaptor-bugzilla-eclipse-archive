@@ -23,7 +23,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,17 +30,12 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
-import jakarta.ws.rs.core.UriInfo;
 
-import org.eclipse.lyo.oslc4j.core.annotation.OslcQueryCapability;
 import org.eclipse.lyo.oslc4j.core.annotation.OslcService;
-import org.eclipse.lyo.oslc4j.core.model.OslcConstants;
 import org.eclipse.lyo.oslc4j.core.model.OslcMediaType;
 
 import se.kth.md.it.bcm.BugzillaLyoArchivesConstants;
@@ -59,12 +53,11 @@ import se.kth.md.it.bcm.ResourcesFactory;
 // End of user code
 
 @OslcService(BugzillaLyoArchivesConstants.BUGZILLA_DOMAIN)
-@Path("serviceProviders/{serviceProviderId}/bugzillaComments")
+@Path("bugz")
 public class BugzillaCommentService
 {
 	@Context private HttpServletRequest httpServletRequest;
 	@Context private HttpServletResponse httpServletResponse;
-	@Context private UriInfo uriInfo;
 	
 	@Inject private ResourcesFactory resourcesFactory;
 
@@ -79,98 +72,6 @@ public class BugzillaCommentService
 		super();
 	}
 
-	/**
-	 * RDF/XML, XML and JSON representation of a comment collection
-	 * 
-	 * @param where
-	 * @param pageString
-	 * @return
-	 * @throws IOException
-	 * @throws ServletException
-	 */
-	@OslcQueryCapability
-	(
-		 title = "QueryCapability for Bugzilla Comments",
-		 label = "Bugzilla Comments Query",
-		 resourceShape = OslcConstants.PATH_RESOURCE_SHAPES + "/" + "bugzillaComment",
-		 resourceTypes = {BugzillaLyoArchivesConstants.BUGZILLA_NAMSPACE + "comment"},
-		 usages = {OslcConstants.OSLC_USAGE_DEFAULT}
-	) 
-	@GET 
-	@Path("query")
-	@Produces({OslcMediaType.APPLICATION_RDF_XML, OslcMediaType.APPLICATION_XML, OslcMediaType.APPLICATION_JSON})
-	public BugzillaComment[] queryBugzillaComments(
-								@PathParam("serviceProviderId") final String serviceProviderId ,
-								@QueryParam("oslc.where") final String where,
-								@QueryParam("page") final String pageString,
-								@QueryParam("limit") final String limitString) throws IOException, ServletException 
-	{
-		int page=0;
-		int limit=20;
-		if (null != pageString) {
-			page = Integer.parseInt(pageString);
-		}
-		if (null != limitString) {
-			limit = Integer.parseInt(limitString);
-		}
-		
-		// Start of user code queryBugzillaComments
-		// End of user code
-
-		final List<BugzillaComment> resources = new ArrayList<>();
-		return resources.toArray(new BugzillaComment[resources.size()]);
-	}
-
-	/**
-	 * HTML representation of comment collection
-	 * 
-	 * @param pageString
-	 * @return
-	 * @throws ServletException
-	 * @throws IOException
-	 */
-	@GET
-	@Path("query")
-	@Produces({ MediaType.TEXT_HTML })
-	public Response queryBugzillaCommentsAsHtml(
-								@PathParam("serviceProviderId") final String serviceProviderId ,
-								@QueryParam("oslc.where") final String where,
-								@QueryParam("page") final String pageString,
-								@QueryParam("limit") final String limitString) throws ServletException, IOException
-	{
-		int page=0;
-		int limit=20;
-		if (null != pageString) {
-			page = Integer.parseInt(pageString);
-		}
-		if (null != limitString) {
-			limit = Integer.parseInt(limitString);
-		}
-
-		// Start of user code queryBugzillaCommentsAsHtml
-		// End of user code
-
-		final List<BugzillaComment> resources = new ArrayList<>();
-
-		if (resources!= null) {
-			httpServletRequest.setAttribute("resources", resources);
-			// Start of user code queryBugzillaCommentsAsHtml_setAttributes
-			// End of user code
-
-			httpServletRequest.setAttribute("queryUri", 
-					uriInfo.getAbsolutePath().toString() + "?oslc.paging=true");
-			if (resources.size() > limit) {
-				resources.remove(resources.size() - 1);
-				httpServletRequest.setAttribute("nextPageUri", 
-					uriInfo.getAbsolutePath().toString() + "?oslc.paging=true&amp;page=" + (page + 1));
-				}
-				RequestDispatcher rd = httpServletRequest.getRequestDispatcher("/se/kth/md/it/bcm/bugzillacommentscollection.jsp");
-				rd.forward(httpServletRequest,httpServletResponse);
-		}
-		
-		throw new WebApplicationException(Status.NOT_FOUND);	
-	}
-
 
 
 	/**
@@ -182,23 +83,29 @@ public class BugzillaCommentService
 	 * @throws URISyntaxException
 	 */
 	@GET
-	@Path("bugz/{bugId}/comments")
+	@Path("{bugId}/comments")
 	@Produces({OslcMediaType.APPLICATION_RDF_XML, OslcMediaType.APPLICATION_XML, OslcMediaType.APPLICATION_JSON})
 	public BugzillaComment[] getBugComments(
-			@PathParam("serviceProviderId") final String serviceProviderId, 
 			@PathParam("bugId") final String bugId
 		) throws IOException, ServletException, URISyntaxException
 	{
 		// Start of user code getBugComments_init
 		// End of user code
 
-		Bug bug = BugzillaArchive.getInstance().getBug(Integer.parseInt(bugId));
+		// Validate bugId parameter
+		int bugIdInt;
+		try {
+			bugIdInt = Integer.parseInt(bugId);
+		} catch (NumberFormatException e) {
+			throw new WebApplicationException("Invalid bug ID: " + bugId, Status.BAD_REQUEST);
+		}
+
+		Bug bug = BugzillaArchive.getInstance().getBug(bugIdInt);
 		if (bug == null) {
 			throw new WebApplicationException(Status.NOT_FOUND);
 		}
 
 		List<BugzillaComment> comments = new ArrayList<>();
-		int commentIndex = 0;
 		for (Comment bugComment : bug.getComments()) {
 			// Skip private comments if we want to filter them
 			if (!bugComment.isPrivate()) {
@@ -211,7 +118,6 @@ public class BugzillaCommentService
 				commentResource.setCreated(bugComment.getBugWhen());
 				commentResource.setIsPrivate(bugComment.isPrivate());
 				comments.add(commentResource);
-				commentIndex++;
 			}
 		}
 
@@ -233,10 +139,9 @@ public class BugzillaCommentService
 	 * @throws URISyntaxException
 	 */
 	@GET
-	@Path("bugz/{bugId}/comments/{commentId}")
+	@Path("{bugId}/comments/{commentId}")
 	@Produces({OslcMediaType.APPLICATION_RDF_XML, OslcMediaType.APPLICATION_XML, OslcMediaType.APPLICATION_JSON})
 	public BugzillaComment getBugComment(
-			@PathParam("serviceProviderId") final String serviceProviderId, 
 			@PathParam("bugId") final String bugId,
 			@PathParam("commentId") final String commentId
 		) throws IOException, ServletException, URISyntaxException
@@ -244,14 +149,23 @@ public class BugzillaCommentService
 		// Start of user code getBugComment_init
 		// End of user code
 
-		Bug bug = BugzillaArchive.getInstance().getBug(Integer.parseInt(bugId));
+		// Validate bugId and commentId parameters
+		int bugIdInt, commentIdInt;
+		try {
+			bugIdInt = Integer.parseInt(bugId);
+			commentIdInt = Integer.parseInt(commentId);
+		} catch (NumberFormatException e) {
+			throw new WebApplicationException("Invalid bug ID or comment ID", Status.BAD_REQUEST);
+		}
+
+		Bug bug = BugzillaArchive.getInstance().getBug(bugIdInt);
 		if (bug == null) {
 			throw new WebApplicationException(Status.NOT_FOUND);
 		}
 
 		BugzillaComment commentResource = null;
 		for (Comment bugComment : bug.getComments()) {
-			if (bugComment.getCommentId() == Integer.parseInt(commentId)) {
+			if (bugComment.getCommentId() == commentIdInt) {
 				commentResource = resourcesFactory.createBugzillaComment(bugId, commentId);
 				commentResource.setCommentId(String.valueOf(bugComment.getCommentId()));
 				commentResource.setCommentCount(bugComment.getCommentCount());

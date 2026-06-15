@@ -238,30 +238,33 @@
                     <%
                     for (Comment comment : bug.getComments()) {
                         if (comment.getCommentCount() > 0 && !comment.isPrivate()) {
+                            request.setAttribute("comment", comment);
                     %>
                     <div class="card mb-3">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-9">
-                                    <p class="card-text"><%= comment.getThetext() != null ? comment.getThetext() : "" %></p>
+                                    <p class="card-text"><c:out value="${comment.thetext}" default=""/></p>
                                 </div>
                                 <div class="col-md-3 text-end">
                                     <small class="text-muted">
-                                    <% if (comment.getWhoName() != null) { %>
-                                        <%= comment.getWhoName() %>
-                                    <% } else if (comment.getWho() != null) { %>
-                                        <%= comment.getWho() %>
-                                    <% } %>
+                                    <c:choose>
+                                        <c:when test="${not empty comment.whoName}">
+                                            <c:out value="${comment.whoName}"/>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:out value="${comment.who}"/>
+                                        </c:otherwise>
+                                    </c:choose>
                                     <br/>
-                                    <% if (comment.getBugWhen() != null) { %>
-                                        <%= comment.getBugWhen() %>
-                                    <% } %>
+                                    <c:out value="${comment.bugWhen}"/>
                                     </small>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <%
+                            request.removeAttribute("comment");
                         }
                     }
                     %>
