@@ -104,9 +104,39 @@ public class BugzillaArchive {
                     for (int i = 0; i < longDescNodes.getLength(); i++) {
                         Element longDescElement = (Element) longDescNodes.item(i);
                         String commentCount = getElementValue(longDescElement, "comment_count");
+                        String isPrivate = longDescElement.getAttribute("isprivate");
+                        
+                        Comment comment = new Comment();
+                        comment.setCommentCount(Integer.parseInt(commentCount));
+                        comment.setThetext(getElementValue(longDescElement, "thetext"));
+                        
+                        String commentIdStr = getElementValue(longDescElement, "commentid");
+                        if (commentIdStr != null) {
+                            comment.setCommentId(Integer.parseInt(commentIdStr));
+                        }
+                        
+                        NodeList whoNodes = longDescElement.getElementsByTagName("who");
+                        if (whoNodes.getLength() > 0) {
+                            Element whoElement = (Element) whoNodes.item(0);
+                            comment.setWho(whoElement.getTextContent());
+                            comment.setWhoName(whoElement.getAttribute("name"));
+                        }
+                        
+                        String bugWhenStr = getElementValue(longDescElement, "bug_when");
+                        if (bugWhenStr != null) {
+                            try {
+                                comment.setBugWhen(sdf.parse(bugWhenStr));
+                            } catch (Exception e) {
+                                log.warn("Failed to parse bug_when: " + bugWhenStr);
+                            }
+                        }
+                        
+                        comment.setPrivate("1".equals(isPrivate));
+                        bug.addComment(comment);
+                        
+                        // The first comment (comment_count = 0) is treated as the bug description
                         if ("0".equals(commentCount)) {
-                            bug.setDescription(getElementValue(longDescElement, "thetext"));
-                            break;
+                            bug.setDescription(comment.getThetext());
                         }
                     }
 

@@ -131,6 +131,11 @@ public class RestDelegate {
 		changeRequest.setOperatingSystem(bug.getOperatingSystem());
 
 		changeRequest.setAbout(resourcesFactory.constructURIForBugzillaChangeRequest(changeRequest.getIdentifier()));
+		
+		// Set discussedBy link to the comments collection
+		if (bug.getComments() != null && !bug.getComments().isEmpty()) {
+			changeRequest.setDiscussedBy(resourcesFactory.constructLinkForBugzillaComments(changeRequest.getIdentifier()));
+		}
 
 		String treatOpenAsAbandonedParam = httpServletRequest.getServletContext().getInitParameter("se.kth.md.it.bcm.bugzilla.treatOpenAsAbandoned");
 		boolean treatOpenAsAbandoned = Boolean.parseBoolean(treatOpenAsAbandonedParam);

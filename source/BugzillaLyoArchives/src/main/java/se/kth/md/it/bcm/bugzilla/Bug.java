@@ -1,6 +1,8 @@
 package se.kth.md.it.bcm.bugzilla;
 
 import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Bug {
     private int id;
@@ -19,6 +21,7 @@ public class Bug {
     private String description;
     private Date creationTime;
     private Date lastChangeTime;
+    private List<Comment> comments = new ArrayList<>();
 
     public int getID() { return id; }
     public void setId(int id) { this.id = id; }
@@ -67,4 +70,8 @@ public class Bug {
 
     public Date getLastChangeTime() { return lastChangeTime; }
     public void setLastChangeTime(Date lastChangeTime) { this.lastChangeTime = lastChangeTime; }
+
+    public List<Comment> getComments() { return comments; }
+    public void setComments(List<Comment> comments) { this.comments = comments; }
+    public void addComment(Comment comment) { this.comments.add(comment); }
 }
