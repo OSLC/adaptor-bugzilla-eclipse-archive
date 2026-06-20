@@ -38,6 +38,9 @@
 <%@page import="se.kth.md.it.bcm.resources.BugzillaChangeRequest"%>
 <%@page import="se.kth.md.it.bcm.resources.BugzDomainConstants"%>
 <%@page import="se.kth.md.it.bcm.resources.Person"%>
+<%@page import="se.kth.md.it.bcm.bugzilla.BugzillaArchive"%>
+<%@page import="se.kth.md.it.bcm.bugzilla.Bug"%>
+<%@page import="se.kth.md.it.bcm.bugzilla.Comment"%>
 
 <%@ page contentType="text/html" language="java" pageEncoding="UTF-8" %>
 
@@ -212,6 +215,69 @@
         </div>
     </div>
 
+    <!-- Comments Section -->
+    <%
+    Bug bug = BugzillaArchive.getInstance().getBug(Integer.parseInt(aBugzillaChangeRequest.getIdentifier()));
+    if (bug != null && bug.getComments() != null && !bug.getComments().isEmpty()) {
+        // Filter out the first comment (description) and private comments for the comments section
+        int commentCount = 0;
+        for (Comment comment : bug.getComments()) {
+            if (comment.getCommentCount() > 0 && !comment.isPrivate()) {
+                commentCount++;
+            }
+        }
+        
+        if (commentCount > 0) {
+    %>
+    <div class="card">
+        <div class="card-header" data-bs-toggle="collapse" href="#collapseComments" role="button" aria-expanded="true" aria-controls="collapseComments">Comments (<%= commentCount %>)</div>
+        <div class="collapse show" id="collapseComments">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <%
+                    for (Comment comment : bug.getComments()) {
+                        if (comment.getCommentCount() > 0 && !comment.isPrivate()) {
+                            request.setAttribute("comment", comment);
+                    %>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <p class="card-text"><c:out value="${comment.thetext}" default=""/></p>
+                                </div>
+                                <div class="col-md-3 text-end">
+                                    <small class="text-muted">
+                                    <c:choose>
+                                        <c:when test="${not empty comment.whoName}">
+                                            <c:out value="${comment.whoName}"/>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:out value="${comment.who}"/>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <br/>
+                                    <c:out value="${comment.bugWhen}"/>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <%
+                            request.removeAttribute("comment");
+                        }
+                    }
+                    %>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <%
+        }
+    }
+    %>
+    
     <!-- People Group -->
     <div class="card">
         <div class="card-header" data-bs-toggle="collapse" href="#collapsePeople" role="button" aria-expanded="true" aria-controls="collapsePeople">People</div>

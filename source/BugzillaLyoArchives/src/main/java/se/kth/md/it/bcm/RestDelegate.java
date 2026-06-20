@@ -131,6 +131,16 @@ public class RestDelegate {
 		changeRequest.setOperatingSystem(bug.getOperatingSystem());
 
 		changeRequest.setAbout(resourcesFactory.constructURIForBugzillaChangeRequest(changeRequest.getIdentifier()));
+		
+		// Set discussedBy link to the comments collection only if there are actual discussion comments
+		// (comment_count > 0 and non-private), aligning with UI filtering
+		if (bug.getComments() != null && !bug.getComments().isEmpty()) {
+			boolean hasDiscussionComments = bug.getComments().stream()
+					.anyMatch(comment -> comment.getCommentCount() > 0 && !comment.isPrivate());
+			if (hasDiscussionComments) {
+				changeRequest.setDiscussedBy(resourcesFactory.constructLinkForBugzillaComments(changeRequest.getIdentifier()));
+			}
+		}
 
 		String treatOpenAsAbandonedParam = httpServletRequest.getServletContext().getInitParameter("se.kth.md.it.bcm.bugzilla.treatOpenAsAbandoned");
 		boolean treatOpenAsAbandoned = Boolean.parseBoolean(treatOpenAsAbandonedParam);

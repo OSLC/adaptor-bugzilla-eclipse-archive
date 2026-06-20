@@ -38,7 +38,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Query capability QueryCapability1</title>
+  <title>Bugzilla Change Requests</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
@@ -50,6 +50,29 @@
       setupUiPreviewOnPopover(document.querySelectorAll("a.oslc-resource-link"));
     });
   </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+      body {
+          font-family: 'Fira Sans', sans-serif;
+          background-color: #f8f9fa;
+      }
+      .page-header {
+          margin-bottom: 2rem;
+      }
+      .card {
+          box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+          border: none;
+          margin-bottom: 2rem;
+      }
+      .card-header {
+          background-color: #fff;
+          border-bottom: 1px solid #eee;
+          font-weight: 600;
+          cursor: pointer;
+      }
+  </style>
 
 </head>
 <body>
@@ -66,16 +89,63 @@
   <!-- Begin page content -->
   <div class="container">
     <div class="page-header">
-      <h1>Query Capability &quot;QueryCapability1&quot; results</h1>
-      <div class="alert alert-secondary" role="alert">
-          Showing&nbsp;${resources.size()} resources on this page
-          <% if (nextPageUri != null) { %><p><a href="<%= nextPageUri %>">Next Page</a></p><% } %>
+      <h1>Bugzilla Change Requests</h1>
+      <div class="alert alert-info" role="alert">
+          Showing ${resources.size()} resources on this page
+          <% if (nextPageUri != null) { %>
+            | <a href="<%= nextPageUri %>">Next Page &raquo;</a>
+          <% } %>
       </div>
     </div>
         <c:forEach items="${resources}" var="res">
           <div class="card mb-3">
             <div class="card-body">
-              <a href="${fn:escapeXml(res.getAbout())}" class="oslc-resource-link">${fn:escapeXml(res.toString())}</a>
+              <div class="row">
+                <div class="col-md-10">
+                  <h5 class="card-title">
+                    <a href="${fn:escapeXml(res.getAbout())}" class="oslc-resource-link">${fn:escapeXml(res.getIdentifier())}: ${fn:escapeXml(res.getTitle())}</a>
+                  </h5>
+                </div>
+                <div class="col-md-2 text-end">
+                  <c:choose>
+                    <c:when test="${res.status == 'NEW' || res.status == 'UNCONFIRMED'}">
+                      <span class="badge rounded-pill bg-primary">${fn:escapeXml(res.status)}</span>
+                    </c:when>
+                    <c:when test="${res.status == 'RESOLVED' || res.status == 'VERIFIED'}">
+                      <span class="badge rounded-pill bg-success">${fn:escapeXml(res.status)}</span>
+                    </c:when>
+                    <c:when test="${res.status == 'CLOSED'}">
+                      <span class="badge rounded-pill bg-dark">${fn:escapeXml(res.status)}</span>
+                    </c:when>
+                    <c:when test="${res.status == 'IN_PROGRESS' || res.status == 'ASSIGNED'}">
+                      <span class="badge rounded-pill bg-info text-dark">${fn:escapeXml(res.status)}</span>
+                    </c:when>
+                    <c:otherwise>
+                      <span class="badge rounded-pill bg-secondary">${fn:escapeXml(res.status)}</span>
+                    </c:otherwise>
+                  </c:choose>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-md-12">
+                  <small class="text-muted">
+                    ${fn:escapeXml(res.getProduct())} / ${fn:escapeXml(res.getComponent())} &
+                    Priority: <c:out value="${res.priority}"/>
+                    <c:if test="${not empty res.subject}">
+                      | <c:forEach items="${res.subject}" var="subject">
+                          <c:choose>
+                            <c:when test="${subject == 'Status: Abandoned'}">
+                              <span class="badge rounded-pill bg-danger me-1">${fn:escapeXml(subject)}</span>
+                            </c:when>
+                            <c:otherwise>
+                              <span class="badge rounded-pill bg-secondary me-1">${fn:escapeXml(subject)}</span>
+                            </c:otherwise>
+                          </c:choose>
+                        </c:forEach>
+                    </c:if>
+                  </small>
+                </div>
+              </div>
             </div>
           </div>
         </c:forEach>

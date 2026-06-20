@@ -26,6 +26,7 @@ import jakarta.ws.rs.core.UriBuilder;
 import org.eclipse.lyo.oslc4j.core.model.Link;
 import org.eclipse.lyo.oslc4j.core.OSLC4JUtils;
 import se.kth.md.it.bcm.resources.BugzillaChangeRequest;
+import se.kth.md.it.bcm.resources.BugzillaComment;
 import se.kth.md.it.bcm.resources.ChangeRequest;
 import se.kth.md.it.bcm.resources.Person;
 import se.kth.md.it.bcm.resources.Type;
@@ -84,6 +85,48 @@ public class ResourcesFactory {
     
     public Link constructLinkForBugzillaChangeRequest(final String bugId) {
         return new Link(constructURIForBugzillaChangeRequest(bugId));
+    }
+    
+    //methods for BugzillaComment resource
+    
+    public BugzillaComment createBugzillaComment(final String bugId, final String commentId) {
+        return new BugzillaComment(constructURIForBugzillaComment(bugId, commentId));
+    }
+    
+    public URI constructURIForBugzillaComment(final String bugId, final String commentId) {
+        Map<String, Object> pathParameters = new HashMap<String, Object>();
+        pathParameters.put("bugId", bugId);
+        pathParameters.put("commentId", commentId);
+        String instanceURI = "bugz/{bugId}/comments/{commentId}";
+   
+        final UriBuilder builder = UriBuilder.fromUri(this.basePath);
+        return builder.path(instanceURI).buildFromMap(pathParameters);
+    }
+    
+    public Link constructLinkForBugzillaComment(final String bugId, final String commentId, final String label) {
+        return new Link(constructURIForBugzillaComment(bugId, commentId), label);
+    }
+    
+    public Link constructLinkForBugzillaComment(final String bugId, final String commentId) {
+        return new Link(constructURIForBugzillaComment(bugId, commentId));
+    }
+    
+    // Methods for comments collection
+    public URI constructURIForBugzillaComments(final String bugId) {
+        Map<String, Object> pathParameters = new HashMap<String, Object>();
+        pathParameters.put("bugId", bugId);
+        String instanceURI = "bugz/{bugId}/comments";
+   
+        final UriBuilder builder = UriBuilder.fromUri(this.basePath);
+        return builder.path(instanceURI).buildFromMap(pathParameters);
+    }
+    
+    public Link constructLinkForBugzillaComments(final String bugId, final String label) {
+        return new Link(constructURIForBugzillaComments(bugId), label);
+    }
+    
+    public Link constructLinkForBugzillaComments(final String bugId) {
+        return new Link(constructURIForBugzillaComments(bugId));
     }
     
 
