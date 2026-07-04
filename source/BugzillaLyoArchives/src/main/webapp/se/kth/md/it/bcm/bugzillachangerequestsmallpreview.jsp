@@ -119,11 +119,18 @@
 <body>
 <%
 String status = aBugzillaChangeRequest.getStatus() != null ? aBugzillaChangeRequest.getStatus() : "Unknown";
-String statusBadgeClass = "bg-secondary text-white";
-if (status.equalsIgnoreCase("new") || status.equalsIgnoreCase("assigned") || status.equalsIgnoreCase("reopened")) {
-    statusBadgeClass = "bg-primary text-white";
-} else if (status.equalsIgnoreCase("resolved") || status.equalsIgnoreCase("verified")) {
-    statusBadgeClass = "bg-success text-white";
+String statusBadgeClass = "badge rounded-pill bg-secondary";
+if (status.equalsIgnoreCase("NEW") || status.equalsIgnoreCase("UNCONFIRMED")) {
+    statusBadgeClass = "badge rounded-pill bg-primary";
+    if (aBugzillaChangeRequest.getSubject().contains("Status: Abandoned")) {
+        statusBadgeClass = "badge rounded-pill bg-warning text-dark";
+    }
+} else if (status.equalsIgnoreCase("RESOLVED") || status.equalsIgnoreCase("VERIFIED")) {
+    statusBadgeClass = "badge rounded-pill bg-success";
+} else if (status.equalsIgnoreCase("CLOSED")) {
+    statusBadgeClass = "badge rounded-pill bg-dark";
+} else if (status.equalsIgnoreCase("IN_PROGRESS") || status.equalsIgnoreCase("ASSIGNED")) {
+    statusBadgeClass = "badge rounded-pill bg-info text-dark";
 }
 
 String priority = aBugzillaChangeRequest.getPriority() != null ? aBugzillaChangeRequest.getPriority() : "n/a";
@@ -155,7 +162,7 @@ if (aBugzillaChangeRequest.getCreator() != null && !aBugzillaChangeRequest.getCr
         <div class="status-row">
             <div>
                 <span class="meta-label" style="font-size: 0.8rem;">Status:</span>
-                <span class="badge <%= statusBadgeClass %>" style="font-size: 0.72rem; padding: 2px 6px;"><%= status %></span>
+                <span class="<%= statusBadgeClass %>" style="font-size: 0.72rem; padding: 2px 6px;"><%= status %></span>
             </div>
             <div>
                 <span class="meta-label" style="font-size: 0.8rem;">Priority:</span>

@@ -728,7 +728,19 @@
             out.write("<em>null</em>");
         }
         else {
-            out.write(aBugzillaChangeRequest.getStatus().toString());
+            String status = aBugzillaChangeRequest.getStatus().toString();
+            String badgeClass = "bg-secondary";
+            if (status.equalsIgnoreCase("NEW") || status.equalsIgnoreCase("UNCONFIRMED")) {
+                badgeClass = "bg-primary";
+                if (aBugzillaChangeRequest.getSubject().contains("Status: Abandoned")) {
+                    badgeClass = "bg-warning text-dark";
+                }
+            }
+            else if (status.equalsIgnoreCase("RESOLVED") || status.equalsIgnoreCase("VERIFIED")) badgeClass = "bg-success";
+            else if (status.equalsIgnoreCase("CLOSED")) badgeClass = "bg-dark";
+            else if (status.equalsIgnoreCase("IN_PROGRESS") || status.equalsIgnoreCase("ASSIGNED")) badgeClass = "bg-info text-dark";
+            
+            out.write("<span class=\"badge rounded-pill " + badgeClass + "\">" + status + "</span>");
         }
         %>
         

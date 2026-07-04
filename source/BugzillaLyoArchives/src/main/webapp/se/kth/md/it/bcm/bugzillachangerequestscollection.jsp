@@ -109,7 +109,14 @@
                 <div class="col-md-2 text-end">
                   <c:choose>
                     <c:when test="${res.status == 'NEW' || res.status == 'UNCONFIRMED'}">
-                      <span class="badge rounded-pill bg-primary">${fn:escapeXml(res.status)}</span>
+                      <c:choose>
+                        <c:when test="${fn:contains(res.subject, 'Status: Abandoned')}">
+                          <span class="badge rounded-pill bg-warning text-dark">${fn:escapeXml(res.status)}</span>
+                        </c:when>
+                        <c:otherwise>
+                          <span class="badge rounded-pill bg-primary">${fn:escapeXml(res.status)}</span>
+                        </c:otherwise>
+                      </c:choose>
                     </c:when>
                     <c:when test="${res.status == 'RESOLVED' || res.status == 'VERIFIED'}">
                       <span class="badge rounded-pill bg-success">${fn:escapeXml(res.status)}</span>
