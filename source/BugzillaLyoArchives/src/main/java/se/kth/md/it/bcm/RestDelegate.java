@@ -72,7 +72,7 @@ public class RestDelegate {
 				aResource = fromBug(bug, httpServletRequest);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Failed to retrieve Bugzilla archive resources", e);
 			throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
 		}
 		return aResource;
@@ -208,7 +208,7 @@ public class RestDelegate {
 				results = new ArrayList<>();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Failed to retrieve Bugzilla archive resources", e);
 			throw new WebApplicationException(e);
 		}
 
@@ -227,7 +227,7 @@ public class RestDelegate {
 				throw new WebApplicationException(Response.Status.NOT_FOUND);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Failed to retrieve Bugzilla archive resources", e);
 			throw new WebApplicationException(e);
 		}
 

@@ -1,0 +1,7 @@
+services:
+  bugzilla:
+    image: ghcr.io/oslc/adaptor-bugzilla-eclipse-archive:latest
+    build:
+      context: ./source/BugzillaLyoArchives
+    ports:
+      - "8180:8080"

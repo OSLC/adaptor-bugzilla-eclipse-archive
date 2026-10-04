@@ -1,4 +1,4 @@
-# OSLC CM server for the the archive of the Lyo bugs in the Eclipse Bugzilla
+# OSLC CM server for the archive of the Lyo bugs in the Eclipse Bugzilla
 
 This project implements an OSLC Change Management (CM) server for accessing the archived bugs of the Eclipse Lyo project in Bugzilla. The server exposes the bugs as OSLC resources, allowing clients to interact with them using standard OSLC protocols. The bugs are loaded from an XML export under `source/BugzillaLyoArchives/src/main/resources/show_bug.cgi.xml`.
 
@@ -16,7 +16,7 @@ podman run -it --rm -p 8180:8080 ghcr.io/oslc/adaptor-bugzilla-eclipse-archive:l
 docker run -it --rm -p 8180:8080 ghcr.io/oslc/adaptor-bugzilla-eclipse-archive:latest
 ```
 
-**From source:**
+**From source (JDK 25 and Maven 3.9+):**
 
 ```
 cd ./source/BugzillaLyoArchives
@@ -24,6 +24,18 @@ mvn clean jetty:run
 ```
 
 Navigate to http://localhost:8180/ afterwards.
+
+**With Compose (from the repository root):**
+
+```sh
+docker compose up --build
+# Or, with a configured Compose provider:
+podman compose up --build
+```
+
+See
+[DEVELOPMENT.md](DEVELOPMENT.md) for build, test, logging and CI instructions,
+and [CONTRIBUTING.md](CONTRIBUTING.md) for contribution rules.
 
 ## Using with custom exports
 

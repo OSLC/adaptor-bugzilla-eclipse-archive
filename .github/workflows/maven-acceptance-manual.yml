@@ -1,53 +1,50 @@
 name: Acceptance test (Lyo HEAD)
-run-name: "acceptance@${{ github.ref_name }} (Lyo@${{ github.event.inputs.lyoBranch }}; comment: ${{ inputs.comment }})"
+run-name: "acceptance@${{ github.ref_name }} (Lyo@${{ inputs.lyoBranch }}; comment: ${{ inputs.comment }})"
 
 on:
   workflow_dispatch:
     inputs:
       lyoBranch:
-        description: 'Lyo branch to test on'
+        description: Lyo branch to test on
         required: true
-        default: 'master'
+        default: main
       lyoRepo:
-        description: 'Lyo repository or fork'
+        description: Lyo repository or fork
         required: true
-        default: 'eclipse/lyo'
+        default: eclipse-lyo/lyo
       comment:
-        description: 'comment, e.g. PR number'
-        default: 'n/a'
+        description: Comment, e.g. PR number
+        default: n/a
+
+permissions:
+  contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event.inputs.lyoRepo }}-${{ github.event.inputs.lyoBranch }}
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.lyoRepo }}-${{ inputs.lyoBranch }}
   cancel-in-progress: false
 
 jobs:
-  build-jdk17:
+  build:
+    name: Build against Lyo HEAD
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        java-version: [25]
-#        distribution: ['temurin', 'zulu', 'oracle', 'corretto', 'microsoft', 'liberica']
-        distribution: ['temurin']
-        # include:
-        #   - java-version: '21'
-        #     distribution: 'temurin'
+    timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
-          repository: "${{ github.event.inputs.lyoRepo }}"
-          ref: "${{ github.event.inputs.lyoBranch }}"
+          repository: ${{ inputs.lyoRepo }}
+          ref: ${{ inputs.lyoBranch }}
           path: lyo-trunk
-      - uses: actions/checkout@v6
+          persist-credentials: false
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           path: main
-      - name: Set up JDK ${{ matrix.java-version }}
-        uses: actions/setup-java@v5
+          persist-credentials: false
+      - name: Set up JDK 25 (Jetty image fallback)
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
-          distribution:  ${{ matrix.distribution }}
-          java-version: ${{ matrix.java-version }}
-      - name: 'Maven build (Lyo)'
-        run: mvn -B clean install --file lyo-trunk/pom.xml -DskipTests -Dmaven.javadoc.skip=true
-      - name: 'Maven build (project)'
-        run: |
-          mvn -B clean verify --file main/source/BugzillaLyoArchives/pom.xml
+          distribution: temurin
+          java-version: '25'
+      - name: Maven build (Lyo)
+        run: mvn -B --no-transfer-progress clean install --file lyo-trunk/pom.xml -DskipTests -Dmaven.javadoc.skip=true
+      - name: Maven build (project)
+        run: mvn -B --no-transfer-progress clean verify --file main/source/BugzillaLyoArchives/pom.xml
