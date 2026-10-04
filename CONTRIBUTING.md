@@ -1,8 +1,5 @@
 # Contributing
 
-Use compatible Lyo SNAPSHOT dependencies for development and test against Lyo HEAD
-with the manual acceptance workflow when changing integration behavior.
-
 Before submitting, follow [DEVELOPMENT.md](DEVELOPMENT.md) for Maven, formatting,
 static analysis and workflow checks. Keep the README startup commands working,
 and update human-facing docs when build, CI, configuration or deployment changes.
