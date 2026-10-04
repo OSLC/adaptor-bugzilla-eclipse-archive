@@ -16,9 +16,9 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <maven.compiler.release>17</maven.compiler.release>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <maven.compiler.release>25</maven.compiler.release>
         <version.lyo>7.0.0-SNAPSHOT</version.lyo>
         <swagger-ui.version>5.18.2</swagger-ui.version>
         <servlet.port>8180</servlet.port>
@@ -60,7 +60,54 @@
     <profiles>
         <!-- Start of user code profiles
         -->
-        <!-- TODO: Add additional profiles here to avoid them be overridden upon future re-generation -->
+        <profile>
+            <id>spotbugs</id>
+            <build><plugins><plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>4.10.4.1</version>
+                <configuration>
+                    <effort>Max</effort>
+                    <threshold>High</threshold>
+                    <xmlOutput>true</xmlOutput>
+                    <failOnError>true</failOnError>
+                </configuration>
+                <executions><execution>
+                    <id>spotbugs-check</id>
+                    <phase>verify</phase>
+                    <goals><goal>check</goal></goals>
+                </execution></executions>
+            </plugin></plugins></build>
+        </profile>
+        <profile>
+            <id>rewrite</id>
+            <build><plugins><plugin>
+                <groupId>org.openrewrite.maven</groupId>
+                <artifactId>rewrite-maven-plugin</artifactId>
+                <version>6.35.0</version>
+                <configuration><activeRecipes>
+                    <recipe>org.openrewrite.java.migrate.UpgradeToJava21</recipe>
+                    <recipe>org.openrewrite.java.logging.slf4j.ParameterizedLogging</recipe>
+                </activeRecipes></configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.openrewrite.recipe</groupId>
+                        <artifactId>rewrite-migrate-java</artifactId>
+                        <version>3.34.1</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.openrewrite.recipe</groupId>
+                        <artifactId>rewrite-testing-frameworks</artifactId>
+                        <version>3.35.3</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.openrewrite.recipe</groupId>
+                        <artifactId>rewrite-logging-frameworks</artifactId>
+                        <version>3.29.1</version>
+                    </dependency>
+                </dependencies>
+            </plugin></plugins></build>
+        </profile>
         <!-- End of user code
         -->
         <profile>
@@ -91,6 +138,13 @@
     -->
    <dependencyManagement>
       <dependencies>
+        <dependency>
+          <groupId>org.junit</groupId>
+          <artifactId>junit-bom</artifactId>
+          <version>6.0.3</version>
+          <scope>import</scope>
+          <type>pom</type>
+        </dependency>
         <dependency>
           <groupId>org.eclipse.lyo</groupId>
           <artifactId>lyo-bom</artifactId>
@@ -130,14 +184,24 @@
             <artifactId>commons-lang</artifactId>
             <version>2.6</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.5.32</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
         <!-- End of user code
         -->
         <!-- General dependencies -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <scope>runtime</scope>
-        </dependency>
         <!-- Servlet dependencies -->
         <dependency>
             <groupId>jakarta.servlet</groupId>
@@ -239,13 +303,78 @@
         <plugins>
             <!-- Start of user code plugins
             -->
-            <!-- TODO: Add additional plugins here to avoid them be overridden upon future re-generation -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.16.0</version>
+                <configuration>
+                    <compilerArgs>
+                        <arg>-Xlint:fallthrough,unchecked,removal,deprecation,dep-ann,varargs,overloads,serial,try,finally</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.6.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.6.3</version>
+                <executions>
+                    <execution>
+                        <id>enforce-toolchain</id>
+                        <goals><goal>enforce</goal></goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion><version>[3.9,)</version></requireMavenVersion>
+                                <requireJavaVersion><version>[25,26)</version></requireJavaVersion>
+                                <banDuplicatePomDependencyVersions />
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>org.slf4j:slf4j-simple</exclude>
+                                        <exclude>org.slf4j:slf4j-reload4j</exclude>
+                                        <exclude>log4j:log4j</exclude>
+                                        <exclude>org.apache.logging.log4j:log4j-core</exclude>
+                                    </excludes>
+                                </bannedDependencies>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>3.10.2</version>
+                <configuration>
+                    <java>
+                        <!-- Generated main sources require model/generator formatting changes. -->
+                        <includes><include>src/test/java/**/*.java</include></includes>
+                        <toggleOffOn />
+                        <googleJavaFormat>
+                            <version>1.30.0</version>
+                            <style>GOOGLE</style>
+                            <reflowLongStrings>true</reflowLongStrings>
+                            <formatJavadoc>false</formatJavadoc>
+                        </googleJavaFormat>
+                    </java>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>check-format</id>
+                        <phase>verify</phase>
+                        <goals><goal>check</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- End of user code
             -->
             <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>11.0.20</version>
+                <groupId>org.eclipse.jetty.ee9</groupId>
+                <artifactId>jetty-ee9-maven-plugin</artifactId>
+                <version>12.1.11</version>
                 <configuration>
                   <webApp>
                     <contextPath>${application.contextpath}</contextPath>
