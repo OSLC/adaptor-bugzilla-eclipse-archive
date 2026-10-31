@@ -46,5 +46,20 @@ jobs:
           java-version: '25'
       - name: Maven build (Lyo)
         run: mvn -B --no-transfer-progress clean install --file lyo-trunk/pom.xml -DskipTests -Dmaven.javadoc.skip=true
+      - name: Detect checked-out Lyo version
+        id: lyo-version
+        shell: bash
+        run: |
+          mvn -B --no-transfer-progress --non-recursive --file lyo-trunk/pom.xml \
+            org.apache.maven.plugins:maven-help-plugin:3.5.1:evaluate \
+            -Dexpression=project.version -Doutput="$RUNNER_TEMP/lyo-version.txt"
+          lyo_version="$(cat "$RUNNER_TEMP/lyo-version.txt")"
+          if [[ ! "$lyo_version" =~ ^[0-9][A-Za-z0-9._-]*$ ]]; then
+            echo "Invalid Lyo version: $lyo_version" >&2
+            exit 1
+          fi
+          printf 'version=%s\n' "$lyo_version" >> "$GITHUB_OUTPUT"
       - name: Maven build (project)
-        run: mvn -B --no-transfer-progress clean verify --file main/source/BugzillaLyoArchives/pom.xml
+        env:
+          LYO_VERSION: ${{ steps.lyo-version.outputs.version }}
+        run: mvn -B --no-transfer-progress clean verify --file main/source/BugzillaLyoArchives/pom.xml "-Dversion.lyo=$LYO_VERSION"
