@@ -62,6 +62,3 @@ branch or fork, and has read-only permissions. It installs that checkout, detect
 its Maven project version, and passes `-Dversion.lyo=<detected version>` to the
 project build so the imported Lyo BOM matches the locally built artifacts.
 The override applies only to that CI run; it does not modify the project POM.
-The upstream install skips tests, Javadocs, source JARs, and CycloneDX output,
-and disables Lyo's SpotBugs, Spotless, and Enforcer profiles. The archive project's
-`verify` step retains its own checks.
