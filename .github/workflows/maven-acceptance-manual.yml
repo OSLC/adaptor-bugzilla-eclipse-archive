@@ -45,7 +45,7 @@ jobs:
           distribution: temurin
           java-version: '25'
       - name: Maven build (Lyo)
-        run: mvn -B --no-transfer-progress clean install --file lyo-trunk/pom.xml -DskipTests -Dmaven.javadoc.skip=true
+        run: mvn -B --no-transfer-progress clean install --file lyo-trunk/pom.xml -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
       - name: Detect checked-out Lyo version
         id: lyo-version
         shell: bash
