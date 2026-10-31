@@ -2,6 +2,7 @@
 
 The single Maven module is `source/BugzillaLyoArchives`, packaged as a WAR.
 Bugzilla data comes from the bundled XML export; no live Bugzilla service is needed.
+Normal builds use the Lyo `7.0.0.Beta4` BOM.
 
 ## Prerequisites
 
@@ -57,4 +58,7 @@ actionlint
 ```
 
 The manually dispatched Lyo HEAD build defaults to `main`, accepts an upstream
-branch or fork, and has read-only permissions.
+branch or fork, and has read-only permissions. It installs that checkout, detects
+its Maven project version, and passes `-Dversion.lyo=<detected version>` to the
+project build so the imported Lyo BOM matches the locally built artifacts.
+The override applies only to that CI run; it does not modify the project POM.
